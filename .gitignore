@@ -1,0 +1,9 @@
+# Ignore virtual environment
+venv/
+__pycache__/
+
+# Ignore logs, large files, and OS-specific files
+*.log
+*.pkl
+*.dll
+.DS_Store
