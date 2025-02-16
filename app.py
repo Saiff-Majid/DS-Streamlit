@@ -84,53 +84,57 @@ elif page == "Exploratory Data Analysis":
     st.plotly_chart(fig_edu)
 
 # ----- SALARY PREDICTION -----
-# ----- SALARY PREDICTION -----
 elif page == "Salary Prediction":
     st.title("💰 Salary Prediction")
     st.write("Enter your details to estimate your expected salary.")
 
     # Load model & feature list
     salary_model = joblib.load("salary_model.pkl")
-    feature_list = [
-        'Programming_Experience_Midpoint', 'ML_Experience_Midpoint', 'Company_Size',
-        'Age_Midpoint', 'Gender', 'Education', 'Country'
-    ]
+    
+    # Load feature names
+    feature_list = salary_model.feature_names_in_
 
     # Dropdown Selections
     gender = st.selectbox("Gender", ["Male", "Female", "Other"])
-    education = st.selectbox("Education Level", ["High School", "Some College", "Bachelor", "Master", "PhD", "Professional", "Professional Doctorate"])
+    education = st.selectbox(
+        "Education Level",
+        ["High School", "Some College", "Bachelor", "Master", "PhD", "Professional", "Professional Doctorate"]
+    )
     country = st.selectbox("Country", df["Country"].unique())
 
     # Sliders for numerical inputs
-    prog_exp = st.slider("Programming Experience (Years)", 0, 20, 3)
-    ml_exp = st.slider("ML Experience (Years)", 0, 10, 2)
-    age = st.slider("Age", 18, 70, 30)
-    company_size = st.selectbox("Company Size", ["0-49 employees", "50-249 employees", "250-999 employees", "1000-9,999 employees", "10,000 or more employees"])
+    prog_exp = st.slider("Programming Experience (Years)", 0, 20, 3, help="Select your programming experience in years.")
+    ml_exp = st.slider("ML Experience (Years)", 0, 10, 2, help="Select your ML experience in years.")
+    age = st.slider("Age", 18, 70, 30, help="Select your age.")
+    company_size = st.selectbox(
+        "Company Size",
+        ["0-49 employees", "50-249 employees", "250-999 employees", "1000-9,999 employees", "10,000 or more employees"]
+    )
 
     # Checkboxes for Programming Languages
-    st.subheader("Programming Languages Used:")
+    st.subheader("📌 Programming Languages Used:")
     lang_options = ['Python', 'R', 'SQL', 'C', 'C++', 'Java', 'Javascript', 'Julia', 'Swift', 'Bash', 'MATLAB', 'C#', 'PHP']
-    selected_langs = {f'Language - {lang}': st.checkbox(lang, value=False) for lang in lang_options}
+    selected_langs = {f'Language - {lang}': st.checkbox(lang, value=False, key=f'lang_{lang}') for lang in lang_options}
 
     # Checkboxes for IDEs
-    st.subheader("Preferred IDEs:")
+    st.subheader("🖥️ Preferred IDEs:")
     ide_options = ['Jupyter Notebook', 'RStudio', 'VSCode', 'PyCharm', 'Spyder', 'Notepad++', 'MATLAB']
-    selected_ides = {f'IDE - {ide}': st.checkbox(ide, value=False) for ide in ide_options}
+    selected_ides = {f'IDE - {ide}': st.checkbox(ide, value=False, key=f'ide_{ide}') for ide in ide_options}
 
     # Checkboxes for ML Frameworks
-    st.subheader("ML Frameworks Used:")
+    st.subheader("🤖 ML Frameworks Used:")
     framework_options = ['Scikit-learn', 'TensorFlow', 'Keras', 'PyTorch', 'Xgboost', 'LightGBM', 'CatBoost']
-    selected_frameworks = {f'Framework - {fw}': st.checkbox(fw, value=False) for fw in framework_options}
+    selected_frameworks = {f'Framework - {fw}': st.checkbox(fw, value=False, key=f'fw_{fw}') for fw in framework_options}
 
     # Checkboxes for ML Algorithms
-    st.subheader("ML Algorithms Used:")
+    st.subheader("📊 ML Algorithms Used:")
     algo_options = ['Linear Regression', 'Random Forest', 'XGBoost', 'Neural Networks', 'Transformers']
-    selected_algos = {f'Algorithm - {algo}': st.checkbox(algo, value=False) for algo in algo_options}
+    selected_algos = {f'Algorithm - {algo}': st.checkbox(algo, value=False, key=f'algo_{algo}') for algo in algo_options}
 
     # Checkboxes for Learning Platforms
-    st.subheader("Learning Platforms Used:")
+    st.subheader("🎓 Learning Platforms Used:")
     platform_options = ['Coursera', 'edX', 'Kaggle Learn', 'DataCamp', 'Udacity', 'Udemy', 'LinkedIn Learning']
-    selected_platforms = {f'Learning - {platform}': st.checkbox(platform, value=False) for platform in platform_options}
+    selected_platforms = {f'Learning - {platform}': st.checkbox(platform, value=False, key=f'platform_{platform}') for platform in platform_options}
 
     # Mapping categorical inputs
     company_size_map = {
@@ -162,19 +166,18 @@ elif page == "Salary Prediction":
         user_input[key] = int(value)  # Convert True/False to 1/0
 
     # Ensure user input matches the trained model's features
-    for col in salary_model.feature_names_in_:
+    for col in feature_list:
         if col not in user_input.columns:
             user_input[col] = 0  # Add missing columns with default 0
 
     # Reorder columns to match model input
-    user_input = user_input[salary_model.feature_names_in_]
+    user_input = user_input[feature_list]
 
     # Predict salary
     salary_prediction = salary_model.predict(user_input)
 
     # Display Prediction
-    st.write(f"### 📌 Predicted Salary: **${salary_prediction[0]:,.2f}**")
-
+    st.markdown(f"## 📌 Predicted Salary: **${salary_prediction[0]:,.2f}** 💰")
 
 
 
