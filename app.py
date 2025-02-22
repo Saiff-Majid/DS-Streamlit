@@ -5,6 +5,8 @@ import joblib
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
+import altair as alt
+from vega_datasets import data
 
 # Load trained models
 salary_model = joblib.load("salary_model.pkl")  
@@ -63,8 +65,9 @@ elif page == "Data Preprocessing & Cleaning":
 
 # ----- EXPLORATORY DATA ANALYSIS -----
 elif page == "Exploratory Data Analysis":
-    st.title("📊 Exploratory Data Analysis")
+    # st.title("📊 Exploratory Data Analysis")
 
+    st.title("📊 Exploratory Data Analysis")
     st.markdown("## **Distribution of Role by Gender**")
     # Role_Title and Gender
     df_filtered = df[df["Gender"].isin(["Male", "Female"])]
@@ -94,7 +97,6 @@ elif page == "Exploratory Data Analysis":
     Respondents whose gender was not Male or Female, and those with a role classified as "Other" 
     were excluded from this visualization. Generally, there were more male respondents compared to female respondents.
     """)
-
     st.markdown("## **Salary Distribution**")
     fig_salary = px.histogram(df, x="Average_Salary", nbins=50, title="Distribution of Salaries")
     st.plotly_chart(fig_salary)
@@ -146,31 +148,43 @@ elif page == "Exploratory Data Analysis":
     and Statisticians) had **Masters** as their highest education level.  
     Majority of those working as **Research Scientists and Professors** had **PhD** as their highest education level.
     """)
-
-    # 📌 ADDING AVERAGE SALARY BY COUNTRY MAP
+    
     st.subheader("🌍 Average Salary by Country")
 
-    # Create a choropleth map using Plotly Express
-    fig_salary_map = px.choropleth(
-        df, 
-        locations="Country",  
-        locationmode="country names",  
-        color="Average_Salary",
-        title="Average Salary by Country",
-        color_continuous_scale="plasma",  
-        labels={"Average_Salary": "Avg Salary (USD)"}
+    # Cap salaries at 120k for better visualization
+    df["Average_Salary_Capped"] = df["Average_Salary"].clip(upper=120000)
+
+    world_map = alt.topo_feature(data.world_110m.url, "countries")
+
+    # Create the map visualization
+    map_chart = (
+        alt.Chart(world_map)
+        .mark_geoshape()
+        .encode(
+            color=alt.Color(
+                "Average_Salary_Capped:Q",
+                scale=alt.Scale(scheme="plasma"),  # Color scale
+                title="Avg Salary (USD)",
+            ),
+            tooltip=["Country:N", "Average_Salary_Capped:Q"],
+        )
+        .transform_lookup(
+            lookup="id",
+            from_=alt.LookupData(df, "Country", ["Average_Salary_Capped"]),
+        )
+        .project(type="naturalEarth1")
+        .properties(width=800, height=400, title="Average Salary by Country")
     )
 
-    # Display the choropleth map
-    st.plotly_chart(fig_salary_map, use_container_width=True)
+    # Show the map in Streamlit
+    st.altair_chart(map_chart, use_container_width=True)
 
-    # Add analysis text
+    # Explanation text
     st.write("""
-    The map above illustrates the distribution of average salaries across different countries.
-    Western countries tend to have **higher average salaries** compared to other regions. However, two exceptions stand out:
-    **Zimbabwe** and **United Arab Emirates**, which exhibit significantly higher average salaries relative to their regions.
+    The map above illustrates the **average salaries across different countries**.
+    To ensure a meaningful comparison, we have **capped salaries at 120k USD**.  
+    Western countries still dominate in salary levels, but there are exceptions such as **Zimbabwe** and **United Arab Emirates**.
     """)
-
 
 # ----- SALARY PREDICTION -----
 elif page == "Salary Prediction":
