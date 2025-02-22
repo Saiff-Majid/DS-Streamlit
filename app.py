@@ -87,7 +87,7 @@ elif page == "Exploratory Data Analysis":
     st.subheader("📊 Distribution of Role by Gender")
 
     # Role_Title and Gender
-    df_filtered = df_cleaned[df_cleaned["Gender"].isin(["Male", "Female"])]
+    df_filtered = df[df["Gender"].isin(["Male", "Female"])]
 
     # Create the stacked bar chart
     fig = px.bar(
