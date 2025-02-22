@@ -70,19 +70,6 @@ elif page == "Exploratory Data Analysis":
     # fig_role = px.bar(role_counts, x=role_counts.index, y=role_counts.values, title="Distribution of Roles")
     # st.plotly_chart(fig_role)
 
-    # st.markdown("## **Salary Distribution**")
-    # fig_salary = px.histogram(df, x="Average_Salary", nbins=50, title="Distribution of Salaries")
-    # st.plotly_chart(fig_salary)
-
-    # st.markdown("## **Programming Experience vs Salary**")
-    # fig_exp = px.scatter(df, x="Programming_Experience_Midpoint", y="Average_Salary", color="Role_Title", title="Experience vs Salary")
-    # st.plotly_chart(fig_exp)
-
-    # st.markdown("## **Salary by Education Level**")
-    # avg_salary_by_education = df.groupby('Education')['Average_Salary'].mean().reset_index()
-    # fig_edu = px.bar(avg_salary_by_education, x="Education", y="Average_Salary", title="Average Salary by Education")
-    # st.plotly_chart(fig_edu)
-
 
     st.subheader("📊 Distribution of Role by Gender")
 
@@ -114,6 +101,18 @@ elif page == "Exploratory Data Analysis":
     Respondents whose gender was not Male or Female, and those with a role classified as "Other" 
     were excluded from this visualization. Generally, there were more male respondents compared to female respondents.
     """)
+    st.markdown("## **Salary Distribution**")
+    fig_salary = px.histogram(df, x="Average_Salary", nbins=50, title="Distribution of Salaries")
+    st.plotly_chart(fig_salary)
+
+    st.markdown("## **Programming Experience vs Salary**")
+    fig_exp = px.scatter(df, x="Programming_Experience_Midpoint", y="Average_Salary", color="Role_Title", title="Experience vs Salary")
+    st.plotly_chart(fig_exp)
+
+    st.markdown("## **Salary by Education Level**")
+    avg_salary_by_education = df.groupby('Education')['Average_Salary'].mean().reset_index()
+    fig_edu = px.bar(avg_salary_by_education, x="Education", y="Average_Salary", title="Average Salary by Education")
+    st.plotly_chart(fig_edu)
 
 # ----- SALARY PREDICTION -----
 elif page == "Salary Prediction":
