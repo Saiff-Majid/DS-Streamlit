@@ -84,36 +84,36 @@ elif page == "Exploratory Data Analysis":
     # st.plotly_chart(fig_edu)
 
 
-st.subheader("📊 Distribution of Role by Gender")
+    st.subheader("📊 Distribution of Role by Gender")
 
-# Role_Title and Gender
-df_filtered = df_cleaned[df_cleaned["Gender"].isin(["Male", "Female"])]
+    # Role_Title and Gender
+    df_filtered = df_cleaned[df_cleaned["Gender"].isin(["Male", "Female"])]
 
-# Create the stacked bar chart
-fig = px.bar(
-    df_filtered, 
-    x="Role_Title", 
-    color="Gender",
-    title="Distribution of Role by Gender",
-    labels={"Role_Title": "Role", "count": "Number of Respondents"},
-    barmode="stack"
-)
+    # Create the stacked bar chart
+    fig = px.bar(
+        df_filtered, 
+        x="Role_Title", 
+        color="Gender",
+        title="Distribution of Role by Gender",
+        labels={"Role_Title": "Role", "count": "Number of Respondents"},
+        barmode="stack"
+    )
 
-# Update layout for better readability
-fig.update_layout(
-    xaxis_title="Role",
-    yaxis_title="Number of Respondents",
-    xaxis_tickangle=-45
-)
+    # Update layout for better readability
+    fig.update_layout(
+        xaxis_title="Role",
+        yaxis_title="Number of Respondents",
+        xaxis_tickangle=-45
+    )
 
-# Display the figure in Streamlit
-st.plotly_chart(fig, use_container_width=True)
+    # Display the figure in Streamlit
+    st.plotly_chart(fig, use_container_width=True)
 
-# Explanation text
-st.write("""
-Respondents whose gender was not Male or Female, and those with a role classified as "Other" 
-were excluded from this visualization. Generally, there were more male respondents compared to female respondents.
-""")
+    # Explanation text
+    st.write("""
+    Respondents whose gender was not Male or Female, and those with a role classified as "Other" 
+    were excluded from this visualization. Generally, there were more male respondents compared to female respondents.
+    """)
 
 # ----- SALARY PREDICTION -----
 elif page == "Salary Prediction":
