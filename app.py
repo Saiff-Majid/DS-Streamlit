@@ -255,26 +255,83 @@ elif page == "Role Prediction":
     st.title("🧑‍💻 Role Prediction")
     st.write("Find out which job best suits your skills!")
 
-    age = st.slider("Age", 18, 60, 25)
+    # Load model & feature list
+    role_model = joblib.load("role_model.pkl")
+    role_feature_list = role_model.feature_names_in_
+
+    # Dropdown Selections
+    gender = st.selectbox("Gender", ["Male", "Female", "Other"])
+    education = st.selectbox(
+        "Education Level",
+        ["High School", "Some College", "Bachelor", "Master", "PhD", "Professional", "Professional Doctorate"]
+    )
+    country = st.selectbox("Country", df["Country"].unique())
+
+    # Sliders for numerical inputs
     prog_exp = st.slider("Programming Experience (Years)", 0, 20, 3)
     ml_exp = st.slider("ML Experience (Years)", 0, 10, 2)
-    company_size = st.selectbox("Company Size", ["Small", "Medium", "Large"])
-    language = st.selectbox("Primary Programming Language", ["Python", "R", "SQL", "Java"])
+    age = st.slider("Age", 18, 70, 30)
 
-    input_data_role = np.array([[age, prog_exp, ml_exp, company_size_map[company_size], language]])
+    # Checkboxes for Programming Languages
+    st.subheader("📌 Programming Languages Used:")
+    lang_options = ['Python', 'R', 'SQL', 'C', 'C++', 'Java', 'Javascript', 'Julia', 'Swift', 'Bash', 'MATLAB', 'C#', 'PHP']
+    selected_langs = {f'Language - {lang}': st.checkbox(lang, value=False, key=f'lang_{lang}') for lang in lang_options}
 
-    role_prediction = role_model.predict(input_data_role)
-    st.write(f"### 🎯 Recommended Role: **{role_prediction[0]}**")
+    # Checkboxes for IDEs
+    st.subheader("🖥️ Preferred IDEs:")
+    ide_options = ['Jupyter Notebook', 'RStudio', 'VSCode', 'PyCharm', 'Spyder', 'Notepad++', 'MATLAB']
+    selected_ides = {f'IDE - {ide}': st.checkbox(ide, value=False, key=f'ide_{ide}') for ide in ide_options}
 
-# ----- CONCLUSION -----
-elif page == "Conclusion":
-    st.title("📌 Conclusion & Future Work")
-    st.markdown("""
-    - **Key Findings**:
-      - Salary is **highly influenced** by experience, company size, and country.
-      - Role prediction is **more complex** due to overlapping skills.
-    - **Future Improvements**:
-      - Improve **role classification** by refining job definitions.
-      - Expand dataset for better accuracy.
-    """)
-    st.success("Thank you for exploring our project!")
+    # Checkboxes for ML Frameworks
+    st.subheader("🤖 ML Frameworks Used:")
+    framework_options = ['Scikit-learn', 'TensorFlow', 'Keras', 'PyTorch', 'Xgboost', 'LightGBM', 'CatBoost']
+    selected_frameworks = {f'Framework - {fw}': st.checkbox(fw, value=False, key=f'fw_{fw}') for fw in framework_options}
+
+    # Checkboxes for ML Algorithms
+    st.subheader("📊 ML Algorithms Used:")
+    algo_options = ['Linear or Logistic Regression', 'Decision Trees or Random Forests', 'Gradient Boosting Machines', 
+                    'Bayesian Approaches', 'Neural Networks', 'Transformers']
+    selected_algos = {f'Algorithm - {algo}': st.checkbox(algo, value=False, key=f'algo_{algo}') for algo in algo_options}
+
+    # Checkboxes for Learning Platforms
+    st.subheader("🎓 Learning Platforms Used:")
+    platform_options = ['Coursera', 'edX', 'Kaggle Learn', 'DataCamp', 'Udacity', 'Udemy', 'LinkedIn Learning']
+    selected_platforms = {f'Learning - {platform}': st.checkbox(platform, value=False, key=f'platform_{platform}') for platform in platform_options}
+
+    # Mapping categorical inputs
+    gender_map = {"Male": 1, "Female": 0, "Other": 2}
+    education_map = {
+        "High School": "High School", "Some College": "Some College", "Bachelor": "Bachelor",
+        "Master": "Master", "PhD": "PhD", "Professional": "Professional", "Professional Doctorate": "Professional Doctorate"
+    }
+
+    # Create user input dataframe
+    user_input = pd.DataFrame({
+        "Programming_Experience_Midpoint": [prog_exp],
+        "ML_Experience_Midpoint": [ml_exp],
+        "Age_Midpoint": [age],
+        "Gender": [gender],
+        "Education": [education],
+        "Country": [country]
+    })
+
+    # Convert categorical features to one-hot encoding
+    user_input = pd.get_dummies(user_input, columns=["Education", "Country", "Gender"])
+
+    # Merge with checkboxes inputs
+    for key, value in {**selected_langs, **selected_ides, **selected_frameworks, **selected_algos, **selected_platforms}.items():
+        user_input[key] = int(value)  # Convert True/False to 1/0
+
+    # Ensure user input matches the trained model's features
+    for col in role_feature_list:
+        if col not in user_input.columns:
+            user_input[col] = 0  # Add missing columns with default 0
+
+    # Reorder columns to match model input
+    user_input = user_input[role_feature_list]
+
+    # Predict role
+    role_prediction = role_model.predict(user_input)
+
+    # Display Prediction
+    st.markdown(f"## 🎯 Recommended Role: **{role_prediction[0]}**")
