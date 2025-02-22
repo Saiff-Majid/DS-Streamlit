@@ -63,14 +63,8 @@ elif page == "Data Preprocessing & Cleaning":
 
 # ----- EXPLORATORY DATA ANALYSIS -----
 elif page == "Exploratory Data Analysis":
-    # st.title("📊 Exploratory Data Analysis")
-
-    # st.markdown("## **Job Role Distribution**")
-    # role_counts = df["Role_Title"].value_counts()
-    # fig_role = px.bar(role_counts, x=role_counts.index, y=role_counts.values, title="Distribution of Roles")
-    # st.plotly_chart(fig_role)
-
     st.title("📊 Exploratory Data Analysis")
+
     st.markdown("## **Distribution of Role by Gender**")
     # Role_Title and Gender
     df_filtered = df[df["Gender"].isin(["Male", "Female"])]
@@ -100,6 +94,7 @@ elif page == "Exploratory Data Analysis":
     Respondents whose gender was not Male or Female, and those with a role classified as "Other" 
     were excluded from this visualization. Generally, there were more male respondents compared to female respondents.
     """)
+
     st.markdown("## **Salary Distribution**")
     fig_salary = px.histogram(df, x="Average_Salary", nbins=50, title="Distribution of Salaries")
     st.plotly_chart(fig_salary)
@@ -151,6 +146,31 @@ elif page == "Exploratory Data Analysis":
     and Statisticians) had **Masters** as their highest education level.  
     Majority of those working as **Research Scientists and Professors** had **PhD** as their highest education level.
     """)
+
+    # 📌 ADDING AVERAGE SALARY BY COUNTRY MAP
+    st.subheader("🌍 Average Salary by Country")
+
+    # Create a choropleth map using Plotly Express
+    fig_salary_map = px.choropleth(
+        df, 
+        locations="Country",  
+        locationmode="country names",  
+        color="Average_Salary",
+        title="Average Salary by Country",
+        color_continuous_scale="plasma",  
+        labels={"Average_Salary": "Avg Salary (USD)"}
+    )
+
+    # Display the choropleth map
+    st.plotly_chart(fig_salary_map, use_container_width=True)
+
+    # Add analysis text
+    st.write("""
+    The map above illustrates the distribution of average salaries across different countries.
+    Western countries tend to have **higher average salaries** compared to other regions. However, two exceptions stand out:
+    **Zimbabwe** and **United Arab Emirates**, which exhibit significantly higher average salaries relative to their regions.
+    """)
+
 
 # ----- SALARY PREDICTION -----
 elif page == "Salary Prediction":
