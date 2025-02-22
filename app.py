@@ -5,8 +5,6 @@ import joblib
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
-import altair as alt
-from vega_datasets import data
 
 # Load trained models
 salary_model = joblib.load("salary_model.pkl")  
@@ -147,45 +145,6 @@ elif page == "Exploratory Data Analysis":
     working on **data-related professions** (Data Analyst, Data Engineer, Data Scientists, Machine Learning Engineer, 
     and Statisticians) had **Masters** as their highest education level.  
     Majority of those working as **Research Scientists and Professors** had **PhD** as their highest education level.
-    """)
-
-    st.subheader("🌍 Average Salary by Country")
-
-    alt.data_transformers.enable("vegafusion")
-
-    # Cap salaries at 120k for better visualization
-    df["Average_Salary_Capped"] = df["Average_Salary"].clip(upper=120000)
-
-    world_map = alt.topo_feature(data.world_110m.url, "countries")
-
-    # Create the map visualization
-    map_chart = (
-        alt.Chart(world_map)
-        .mark_geoshape()
-        .encode(
-            color=alt.Color(
-                "Average_Salary_Capped:Q",
-                scale=alt.Scale(scheme="plasma"),  # Color scale
-                title="Avg Salary (USD)",
-            ),
-            tooltip=["Country:N", "Average_Salary_Capped:Q"],
-        )
-        .transform_lookup(
-            lookup="id",
-            from_=alt.LookupData(df, "Country", ["Average_Salary_Capped"]),
-        )
-        .project(type="naturalEarth1")
-        .properties(width=800, height=400, title="Average Salary by Country")
-    )
-
-    # Show the map in Streamlit
-    st.altair_chart(map_chart, use_container_width=True)
-
-    # Explanation text
-    st.write("""
-    The map above illustrates the **average salaries across different countries**.
-    To ensure a meaningful comparison, we have **capped salaries at 120k USD**.  
-    Western countries still dominate in salary levels, but there are exceptions such as **Zimbabwe** and **United Arab Emirates**.
     """)
 
 # ----- SALARY PREDICTION -----
