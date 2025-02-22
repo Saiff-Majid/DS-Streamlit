@@ -148,8 +148,10 @@ elif page == "Exploratory Data Analysis":
     and Statisticians) had **Masters** as their highest education level.  
     Majority of those working as **Research Scientists and Professors** had **PhD** as their highest education level.
     """)
-    
+
     st.subheader("🌍 Average Salary by Country")
+
+    alt.data_transformers.enable("vegafusion")
 
     # Cap salaries at 120k for better visualization
     df["Average_Salary_Capped"] = df["Average_Salary"].clip(upper=120000)
