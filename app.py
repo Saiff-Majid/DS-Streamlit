@@ -63,25 +63,57 @@ elif page == "Data Preprocessing & Cleaning":
 
 # ----- EXPLORATORY DATA ANALYSIS -----
 elif page == "Exploratory Data Analysis":
-    st.title("📊 Exploratory Data Analysis")
+    # st.title("📊 Exploratory Data Analysis")
 
-    st.markdown("## **Job Role Distribution**")
-    role_counts = df["Role_Title"].value_counts()
-    fig_role = px.bar(role_counts, x=role_counts.index, y=role_counts.values, title="Distribution of Roles")
-    st.plotly_chart(fig_role)
+    # st.markdown("## **Job Role Distribution**")
+    # role_counts = df["Role_Title"].value_counts()
+    # fig_role = px.bar(role_counts, x=role_counts.index, y=role_counts.values, title="Distribution of Roles")
+    # st.plotly_chart(fig_role)
 
-    st.markdown("## **Salary Distribution**")
-    fig_salary = px.histogram(df, x="Average_Salary", nbins=50, title="Distribution of Salaries")
-    st.plotly_chart(fig_salary)
+    # st.markdown("## **Salary Distribution**")
+    # fig_salary = px.histogram(df, x="Average_Salary", nbins=50, title="Distribution of Salaries")
+    # st.plotly_chart(fig_salary)
 
-    st.markdown("## **Programming Experience vs Salary**")
-    fig_exp = px.scatter(df, x="Programming_Experience_Midpoint", y="Average_Salary", color="Role_Title", title="Experience vs Salary")
-    st.plotly_chart(fig_exp)
+    # st.markdown("## **Programming Experience vs Salary**")
+    # fig_exp = px.scatter(df, x="Programming_Experience_Midpoint", y="Average_Salary", color="Role_Title", title="Experience vs Salary")
+    # st.plotly_chart(fig_exp)
 
-    st.markdown("## **Salary by Education Level**")
-    avg_salary_by_education = df.groupby('Education')['Average_Salary'].mean().reset_index()
-    fig_edu = px.bar(avg_salary_by_education, x="Education", y="Average_Salary", title="Average Salary by Education")
-    st.plotly_chart(fig_edu)
+    # st.markdown("## **Salary by Education Level**")
+    # avg_salary_by_education = df.groupby('Education')['Average_Salary'].mean().reset_index()
+    # fig_edu = px.bar(avg_salary_by_education, x="Education", y="Average_Salary", title="Average Salary by Education")
+    # st.plotly_chart(fig_edu)
+
+
+st.subheader("📊 Distribution of Role by Gender")
+
+# Role_Title and Gender
+df_filtered = df_cleaned[df_cleaned["Gender"].isin(["Male", "Female"])]
+
+# Create the stacked bar chart
+fig = px.bar(
+    df_filtered, 
+    x="Role_Title", 
+    color="Gender",
+    title="Distribution of Role by Gender",
+    labels={"Role_Title": "Role", "count": "Number of Respondents"},
+    barmode="stack"
+)
+
+# Update layout for better readability
+fig.update_layout(
+    xaxis_title="Role",
+    yaxis_title="Number of Respondents",
+    xaxis_tickangle=-45
+)
+
+# Display the figure in Streamlit
+st.plotly_chart(fig, use_container_width=True)
+
+# Explanation text
+st.write("""
+Respondents whose gender was not Male or Female, and those with a role classified as "Other" 
+were excluded from this visualization. Generally, there were more male respondents compared to female respondents.
+""")
 
 # ----- SALARY PREDICTION -----
 elif page == "Salary Prediction":
