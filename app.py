@@ -70,9 +70,8 @@ elif page == "Exploratory Data Analysis":
     # fig_role = px.bar(role_counts, x=role_counts.index, y=role_counts.values, title="Distribution of Roles")
     # st.plotly_chart(fig_role)
 
-
-    st.subheader("📊 Distribution of Role by Gender")
-
+    st.title("📊 Exploratory Data Analysis")
+    st.markdown("## **Distribution of Role by Gender**")
     # Role_Title and Gender
     df_filtered = df[df["Gender"].isin(["Male", "Female"])]
 
@@ -113,6 +112,45 @@ elif page == "Exploratory Data Analysis":
     avg_salary_by_education = df.groupby('Education')['Average_Salary'].mean().reset_index()
     fig_edu = px.bar(avg_salary_by_education, x="Education", y="Average_Salary", title="Average Salary by Education")
     st.plotly_chart(fig_edu)
+
+    st.subheader("📊 Proportional Distribution of Education Levels within Roles")
+
+    # Filter necessary columns
+    df_filtered_edu = df[["Role_Title", "Education"]]
+
+    # Normalize count to get proportions
+    df_edu_counts = df_filtered_edu.groupby(["Role_Title", "Education"]).size().reset_index(name="Count")
+    df_edu_counts["Proportion"] = df_edu_counts.groupby("Role_Title")["Count"].transform(lambda x: x / x.sum())
+
+    # Create the stacked bar chart
+    fig_edu = px.bar(
+        df_edu_counts, 
+        x="Role_Title", 
+        y="Proportion", 
+        color="Education",
+        title="Proportional Distribution of Education Levels within Roles",
+        labels={"Role_Title": "Role", "Proportion": "Proportion", "Education": "Education Level"},
+        barmode="stack"
+    )
+
+    # Update layout
+    fig_edu.update_layout(
+        xaxis_title="Role",
+        yaxis_title="Proportion",
+        xaxis_tickangle=-45
+    )
+
+    # Display in Streamlit
+    st.plotly_chart(fig_edu, use_container_width=True)
+
+    # Explanation text
+    st.write("""
+    Distribution of educational levels within roles revealed that generally most respondents had 
+    **Bachelors or Masters** as the highest education level. The highest proportion of respondents 
+    working on **data-related professions** (Data Analyst, Data Engineer, Data Scientists, Machine Learning Engineer, 
+    and Statisticians) had **Masters** as their highest education level.  
+    Majority of those working as **Research Scientists and Professors** had **PhD** as their highest education level.
+    """)
 
 # ----- SALARY PREDICTION -----
 elif page == "Salary Prediction":
