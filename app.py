@@ -248,18 +248,17 @@ elif page == "Salary Prediction":
     # Display Prediction
     st.markdown(f"## 📌 Predicted Salary: **${salary_prediction[0]:,.2f}** 💰")
 
-
-
 # ----- ROLE PREDICTION -----
 elif page == "Role Prediction":
     st.title("🧑‍💻 Role Prediction")
     st.write("Find out which job best suits your skills!")
 
-    # Load model & feature list
+    # Load trained model & label encoder
     role_model = joblib.load("role_model.pkl")
+    label_encoder = joblib.load("role_label_encoder.pkl")  # Load the label encoder
     role_feature_list = role_model.feature_names_in_
 
-    # Dropdown Selections
+    # User Input Fields
     gender = st.selectbox("Gender", ["Male", "Female", "Other"])
     education = st.selectbox(
         "Education Level",
@@ -267,7 +266,6 @@ elif page == "Role Prediction":
     )
     country = st.selectbox("Country", df["Country"].unique())
 
-    # Sliders for numerical inputs
     prog_exp = st.slider("Programming Experience (Years)", 0, 20, 3)
     ml_exp = st.slider("ML Experience (Years)", 0, 10, 2)
     age = st.slider("Age", 18, 70, 30)
@@ -300,10 +298,6 @@ elif page == "Role Prediction":
 
     # Mapping categorical inputs
     gender_map = {"Male": 1, "Female": 0, "Other": 2}
-    education_map = {
-        "High School": "High School", "Some College": "Some College", "Bachelor": "Bachelor",
-        "Master": "Master", "PhD": "PhD", "Professional": "Professional", "Professional Doctorate": "Professional Doctorate"
-    }
 
     # Create user input dataframe
     user_input = pd.DataFrame({
@@ -330,8 +324,14 @@ elif page == "Role Prediction":
     # Reorder columns to match model input
     user_input = user_input[role_feature_list]
 
-    # Predict role
-    role_prediction = role_model.predict(user_input)
+    # **Prediction Button**
+    if st.button("Predict My Role"):
+        # Predict role
+        role_prediction_encoded = role_model.predict(user_input)[0]
+        
+        # Convert prediction back to actual job title
+        predicted_role = label_encoder.inverse_transform([role_prediction_encoded])[0]
 
-    # Display Prediction
-    st.markdown(f"## 🎯 Recommended Role: **{role_prediction[0]}**")
+        # Display Prediction
+        st.markdown(f"## 🎯 Recommended Role: **{predicted_role}**")
+
