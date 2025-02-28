@@ -189,49 +189,49 @@ elif page == "Salary Prediction":
         st.session_state.gender = st.radio("Select your gender:", ["Male", "Female", "Other"], index=0)
         if st.button("Next"):
             st.session_state.step += 1
-            st.experimental_rerun()
+            st.rerun()
 
     elif st.session_state.step == 2:
         st.write(f"I am a {st.session_state.gender} and I have a...")
         st.session_state.education = st.radio("Select your education level:", education_levels, index=2)
         if st.button("Next"):
             st.session_state.step += 1
-            st.experimental_rerun()
+            st.rerun()
 
     elif st.session_state.step == 3:
         st.write(f"I am a {st.session_state.gender} with a {st.session_state.education} degree. I live in...")
         st.session_state.country = st.selectbox("Select your country:", df["Country"].unique())
         if st.button("Next"):
             st.session_state.step += 1
-            st.experimental_rerun()
+            st.rerun()
 
     elif st.session_state.step == 4:
         st.write(f"I am a {st.session_state.gender} with a {st.session_state.education} degree living in {st.session_state.country}.")
         st.session_state.prog_exp = st.slider("How many years of programming experience do you have?", 0, 20, 3)
         if st.button("Next"):
             st.session_state.step += 1
-            st.experimental_rerun()
+            st.rerun()
 
     elif st.session_state.step == 5:
         st.write(f"I have {st.session_state.prog_exp} years of programming experience.")
         st.session_state.ml_exp = st.slider("How many years of ML experience do you have?", 0, 10, 2)
         if st.button("Next"):
             st.session_state.step += 1
-            st.experimental_rerun()
+            st.rerun()
 
     elif st.session_state.step == 6:
         st.write(f"I have {st.session_state.prog_exp} years of programming and {st.session_state.ml_exp} years of ML experience.")
         st.session_state.age = st.slider("What is your age?", 18, 70, 30)
         if st.button("Next"):
             st.session_state.step += 1
-            st.experimental_rerun()
+            st.rerun()
 
     elif st.session_state.step == 7:
         st.write(f"I am {st.session_state.age} years old, with {st.session_state.prog_exp} years of programming and {st.session_state.ml_exp} years of ML experience.")
         st.session_state.company_size = st.selectbox("What is your company size?", company_sizes)
         if st.button("Next"):
             st.session_state.step += 1
-            st.experimental_rerun()
+            st.rerun()
 
     elif st.session_state.step == 8:
         st.write("📌 Select the programming languages you use:")
@@ -239,7 +239,7 @@ elif page == "Salary Prediction":
         st.session_state.selected_langs = [lang for lang in lang_options if st.checkbox(lang, value=False, key=f'lang_{lang}')]
         if st.button("Next"):
             st.session_state.step += 1
-            st.experimental_rerun()
+            st.rerun()
 
     elif st.session_state.step == 9:
         st.write("🖥️ Select your preferred IDEs:")
@@ -247,7 +247,7 @@ elif page == "Salary Prediction":
         st.session_state.selected_ides = [ide for ide in ide_options if st.checkbox(ide, value=False, key=f'ide_{ide}')]
         if st.button("Next"):
             st.session_state.step += 1
-            st.experimental_rerun()
+            st.rerun()
 
     elif st.session_state.step == 10:
         st.write("🤖 Select the ML frameworks you use:")
@@ -255,7 +255,7 @@ elif page == "Salary Prediction":
         st.session_state.selected_frameworks = [fw for fw in framework_options if st.checkbox(fw, value=False, key=f'fw_{fw}')]
         if st.button("Next"):
             st.session_state.step += 1
-            st.experimental_rerun()
+            st.rerun()
 
     elif st.session_state.step == 11:
         st.write("📊 Select the ML algorithms you use:")
@@ -263,7 +263,7 @@ elif page == "Salary Prediction":
         st.session_state.selected_algos = [algo for algo in algo_options if st.checkbox(algo, value=False, key=f'algo_{algo}')]
         if st.button("Next"):
             st.session_state.step += 1
-            st.experimental_rerun()
+            st.rerun()
 
     elif st.session_state.step == 12:
         st.write("🎓 Select the learning platforms you use:")
@@ -271,7 +271,7 @@ elif page == "Salary Prediction":
         st.session_state.selected_platforms = [platform for platform in platform_options if st.checkbox(platform, value=False, key=f'platform_{platform}')]
         if st.button("Predict Salary"):
             st.session_state.step += 1
-            st.experimental_rerun()
+            st.rerun()
 
     elif st.session_state.step == 13:
         # Create user input dataframe
