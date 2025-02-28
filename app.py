@@ -146,31 +146,24 @@ elif page == "Exploratory Data Analysis":
     and Statisticians) had **Masters** as their highest education level.  
     Majority of those working as **Research Scientists and Professors** had **PhD** as their highest education level.
     """)
-
+    
 # ----- SALARY PREDICTION -----
 elif page == "Salary Prediction":
     st.title("💰 Salary Prediction")
-    st.write("Enter your details to estimate your expected salary.")
+    st.markdown("<h3 style='font-size:22px;'>Enter your details to estimate your expected salary.</h3>", unsafe_allow_html=True)
 
     # Load trained model
     salary_model = joblib.load("salary_model.pkl")
     feature_list = salary_model.feature_names_in_
 
-    # Initialize session state variables for interactive responses
+    # Initialize session state variables
     if "step" not in st.session_state:
-        st.session_state.step = 1
-        st.session_state.gender = None
-        st.session_state.education = None
-        st.session_state.country = None
-        st.session_state.prog_exp = None
-        st.session_state.ml_exp = None
-        st.session_state.age = None
-        st.session_state.company_size = None
-        st.session_state.selected_langs = []
-        st.session_state.selected_ides = []
-        st.session_state.selected_frameworks = []
-        st.session_state.selected_algos = []
-        st.session_state.selected_platforms = []
+        st.session_state.update({
+            "step": 1, "gender": None, "education": None, "country": None,
+            "prog_exp": None, "ml_exp": None, "age": None, "company_size": None,
+            "selected_langs": [], "selected_ides": [], "selected_frameworks": [],
+            "selected_algos": [], "selected_platforms": []
+        })
 
     # Mapping categorical inputs
     company_size_map = {
@@ -183,92 +176,77 @@ elif page == "Salary Prediction":
     education_levels = ["High School", "Some College", "Bachelor", "Master", "PhD", "Professional", "Professional Doctorate"]
     company_sizes = list(company_size_map.keys())
 
+    def go_back(step):
+        st.session_state.step = step
+        st.rerun()
+
     # Step-by-step questioning
     if st.session_state.step == 1:
-        st.write("I am...")
+        st.markdown("<h3>I am...</h3>", unsafe_allow_html=True)
         st.session_state.gender = st.radio("Select your gender:", ["Male", "Female", "Other"], index=0)
         if st.button("Next"):
             st.session_state.step += 1
             st.rerun()
 
     elif st.session_state.step == 2:
-        st.write(f"I am a {st.session_state.gender} and I have a...")
+        st.markdown(f"<h3>I am a **{st.session_state.gender}** and I have a...</h3>", unsafe_allow_html=True)
+        if st.button(f"🔄 Change: **{st.session_state.gender}**"):
+            go_back(1)
         st.session_state.education = st.radio("Select your education level:", education_levels, index=2)
         if st.button("Next"):
             st.session_state.step += 1
             st.rerun()
 
     elif st.session_state.step == 3:
-        st.write(f"I am a {st.session_state.gender} with a {st.session_state.education} degree. I live in...")
+        st.markdown(f"<h3>I am a **{st.session_state.gender}** with a **{st.session_state.education}** degree. I live in...</h3>", unsafe_allow_html=True)
+        if st.button(f"🔄 Change: **{st.session_state.education}**"):
+            go_back(2)
         st.session_state.country = st.selectbox("Select your country:", df["Country"].unique())
         if st.button("Next"):
             st.session_state.step += 1
             st.rerun()
 
     elif st.session_state.step == 4:
-        st.write(f"I am a {st.session_state.gender} with a {st.session_state.education} degree living in {st.session_state.country}.")
+        st.markdown(f"<h3>I am a **{st.session_state.gender}** with a **{st.session_state.education}** degree living in **{st.session_state.country}**.</h3>", unsafe_allow_html=True)
+        if st.button(f"🔄 Change: **{st.session_state.country}**"):
+            go_back(3)
         st.session_state.prog_exp = st.slider("How many years of programming experience do you have?", 0, 20, 3)
         if st.button("Next"):
             st.session_state.step += 1
             st.rerun()
 
     elif st.session_state.step == 5:
-        st.write(f"I have {st.session_state.prog_exp} years of programming experience.")
+        st.markdown(f"<h3>I have **{st.session_state.prog_exp}** years of programming experience.</h3>", unsafe_allow_html=True)
+        if st.button(f"🔄 Change: **{st.session_state.prog_exp}** years"):
+            go_back(4)
         st.session_state.ml_exp = st.slider("How many years of ML experience do you have?", 0, 10, 2)
         if st.button("Next"):
             st.session_state.step += 1
             st.rerun()
 
     elif st.session_state.step == 6:
-        st.write(f"I have {st.session_state.prog_exp} years of programming and {st.session_state.ml_exp} years of ML experience.")
+        st.markdown(f"<h3>I have **{st.session_state.prog_exp}** years of programming and **{st.session_state.ml_exp}** years of ML experience.</h3>", unsafe_allow_html=True)
+        if st.button(f"🔄 Change: **{st.session_state.ml_exp}** years"):
+            go_back(5)
         st.session_state.age = st.slider("What is your age?", 18, 70, 30)
         if st.button("Next"):
             st.session_state.step += 1
             st.rerun()
 
     elif st.session_state.step == 7:
-        st.write(f"I am {st.session_state.age} years old, with {st.session_state.prog_exp} years of programming and {st.session_state.ml_exp} years of ML experience.")
+        st.markdown(f"<h3>I am **{st.session_state.age}** years old, with **{st.session_state.prog_exp}** years of programming and **{st.session_state.ml_exp}** years of ML experience.</h3>", unsafe_allow_html=True)
+        if st.button(f"🔄 Change: **{st.session_state.age}** years"):
+            go_back(6)
         st.session_state.company_size = st.selectbox("What is your company size?", company_sizes)
         if st.button("Next"):
             st.session_state.step += 1
             st.rerun()
 
-    elif st.session_state.step == 8:
-        st.write("📌 Select the programming languages you use:")
-        lang_options = ['Python', 'R', 'SQL', 'C', 'C++', 'Java', 'Javascript', 'Julia', 'Swift', 'Bash', 'MATLAB', 'C#', 'PHP']
-        st.session_state.selected_langs = [lang for lang in lang_options if st.checkbox(lang, value=False, key=f'lang_{lang}')]
-        if st.button("Next"):
-            st.session_state.step += 1
-            st.rerun()
-
-    elif st.session_state.step == 9:
-        st.write("🖥️ Select your preferred IDEs:")
-        ide_options = ['Jupyter Notebook', 'RStudio', 'VSCode', 'PyCharm', 'Spyder', 'Notepad++', 'MATLAB']
-        st.session_state.selected_ides = [ide for ide in ide_options if st.checkbox(ide, value=False, key=f'ide_{ide}')]
-        if st.button("Next"):
-            st.session_state.step += 1
-            st.rerun()
-
-    elif st.session_state.step == 10:
-        st.write("🤖 Select the ML frameworks you use:")
-        framework_options = ['Scikit-learn', 'TensorFlow', 'Keras', 'PyTorch', 'Xgboost', 'LightGBM', 'CatBoost']
-        st.session_state.selected_frameworks = [fw for fw in framework_options if st.checkbox(fw, value=False, key=f'fw_{fw}')]
-        if st.button("Next"):
-            st.session_state.step += 1
-            st.rerun()
-
-    elif st.session_state.step == 11:
-        st.write("📊 Select the ML algorithms you use:")
-        algo_options = ['Linear Regression', 'Random Forest', 'XGBoost', 'Neural Networks', 'Transformers']
-        st.session_state.selected_algos = [algo for algo in algo_options if st.checkbox(algo, value=False, key=f'algo_{algo}')]
-        if st.button("Next"):
-            st.session_state.step += 1
-            st.rerun()
-
     elif st.session_state.step == 12:
-        st.write("🎓 Select the learning platforms you use:")
+        st.markdown("<h3>🎓 Select the learning platforms you use:</h3>", unsafe_allow_html=True)
         platform_options = ['Coursera', 'edX', 'Kaggle Learn', 'DataCamp', 'Udacity', 'Udemy', 'LinkedIn Learning']
         st.session_state.selected_platforms = [platform for platform in platform_options if st.checkbox(platform, value=False, key=f'platform_{platform}')]
+
         if st.button("Predict Salary"):
             st.session_state.step += 1
             st.rerun()
@@ -301,9 +279,9 @@ elif page == "Salary Prediction":
 
         # Predict salary
         salary_prediction = salary_model.predict(user_input)
-        
+
         # Display final result
-        st.markdown(f"## 📌 Predicted Salary: **${salary_prediction[0]:,.2f}** 💰")
+        st.markdown(f"<h2>📌 Predicted Salary: <span style='color:green;'>**${salary_prediction[0]:,.2f}**</span> 💰</h2>", unsafe_allow_html=True)
 
 # ----- ROLE PREDICTION -----
 elif page == "Role Prediction":
