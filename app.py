@@ -330,3 +330,15 @@ elif page == "Role Prediction":
         # Display Prediction
         st.markdown(f"## 🎯 Recommended Role: **{predicted_role}**")
 
+# ----- CONCLUSION -----
+elif page == "Conclusion":
+    st.title("📌 Conclusion & Future Work")
+    st.markdown("""
+    - **Key Findings**:
+      - Salary is **highly influenced** by experience, company size, and country.
+      - Role prediction is **more complex** due to overlapping skills.
+    - **Future Improvements**:
+      - Improve **role classification** by refining job definitions.
+      - Expand dataset for better accuracy.
+    """)
+    st.success("Thank you for exploring our project!")
