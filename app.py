@@ -148,158 +148,162 @@ elif page == "Exploratory Data Analysis":
     """)
 
 # ----- SALARY PREDICTION -----
-# Load trained model
-salary_model = joblib.load("salary_model.pkl")
-feature_list = salary_model.feature_names_in_
+elif page == "Salary Prediction":
+    st.title("💰 Salary Prediction")
+    st.write("Enter your details to estimate your expected salary.")
 
-# Initialize session state variables for interactive responses
-if "step" not in st.session_state:
-    st.session_state.step = 1
-    st.session_state.gender = None
-    st.session_state.education = None
-    st.session_state.country = None
-    st.session_state.prog_exp = None
-    st.session_state.ml_exp = None
-    st.session_state.age = None
-    st.session_state.company_size = None
-    st.session_state.selected_langs = []
-    st.session_state.selected_ides = []
-    st.session_state.selected_frameworks = []
-    st.session_state.selected_algos = []
-    st.session_state.selected_platforms = []
+    # Load trained model
+    salary_model = joblib.load("salary_model.pkl")
+    feature_list = salary_model.feature_names_in_
 
-# Mapping categorical inputs
-company_size_map = {
-    "0-49 employees": 25, "50-249 employees": 150, "250-999 employees": 625,
-    "1000-9,999 employees": 5500, "10,000 or more employees": 10000
-}
-gender_map = {"Male": 1, "Female": 0, "Other": 2}
+    # Initialize session state variables for interactive responses
+    if "step" not in st.session_state:
+        st.session_state.step = 1
+        st.session_state.gender = None
+        st.session_state.education = None
+        st.session_state.country = None
+        st.session_state.prog_exp = None
+        st.session_state.ml_exp = None
+        st.session_state.age = None
+        st.session_state.company_size = None
+        st.session_state.selected_langs = []
+        st.session_state.selected_ides = []
+        st.session_state.selected_frameworks = []
+        st.session_state.selected_algos = []
+        st.session_state.selected_platforms = []
 
-# Define selectable options
-education_levels = ["High School", "Some College", "Bachelor", "Master", "PhD", "Professional", "Professional Doctorate"]
-company_sizes = list(company_size_map.keys())
+    # Mapping categorical inputs
+    company_size_map = {
+        "0-49 employees": 25, "50-249 employees": 150, "250-999 employees": 625,
+        "1000-9,999 employees": 5500, "10,000 or more employees": 10000
+    }
+    gender_map = {"Male": 1, "Female": 0, "Other": 2}
 
-# Step-by-step questioning
-if st.session_state.step == 1:
-    st.write("I am...")
-    st.session_state.gender = st.radio("Select your gender:", ["Male", "Female", "Other"], index=0)
-    if st.button("Next"):
-        st.session_state.step += 1
-        st.experimental_rerun()
+    # Define selectable options
+    education_levels = ["High School", "Some College", "Bachelor", "Master", "PhD", "Professional", "Professional Doctorate"]
+    company_sizes = list(company_size_map.keys())
 
-elif st.session_state.step == 2:
-    st.write(f"I am a {st.session_state.gender} and I have a...")
-    st.session_state.education = st.radio("Select your education level:", education_levels, index=2)
-    if st.button("Next"):
-        st.session_state.step += 1
-        st.experimental_rerun()
+    # Step-by-step questioning
+    if st.session_state.step == 1:
+        st.write("I am...")
+        st.session_state.gender = st.radio("Select your gender:", ["Male", "Female", "Other"], index=0)
+        if st.button("Next"):
+            st.session_state.step += 1
+            st.experimental_rerun()
 
-elif st.session_state.step == 3:
-    st.write(f"I am a {st.session_state.gender} with a {st.session_state.education} degree. I live in...")
-    st.session_state.country = st.selectbox("Select your country:", df["Country"].unique())
-    if st.button("Next"):
-        st.session_state.step += 1
-        st.experimental_rerun()
+    elif st.session_state.step == 2:
+        st.write(f"I am a {st.session_state.gender} and I have a...")
+        st.session_state.education = st.radio("Select your education level:", education_levels, index=2)
+        if st.button("Next"):
+            st.session_state.step += 1
+            st.experimental_rerun()
 
-elif st.session_state.step == 4:
-    st.write(f"I am a {st.session_state.gender} with a {st.session_state.education} degree living in {st.session_state.country}.")
-    st.session_state.prog_exp = st.slider("How many years of programming experience do you have?", 0, 20, 3)
-    if st.button("Next"):
-        st.session_state.step += 1
-        st.experimental_rerun()
+    elif st.session_state.step == 3:
+        st.write(f"I am a {st.session_state.gender} with a {st.session_state.education} degree. I live in...")
+        st.session_state.country = st.selectbox("Select your country:", df["Country"].unique())
+        if st.button("Next"):
+            st.session_state.step += 1
+            st.experimental_rerun()
 
-elif st.session_state.step == 5:
-    st.write(f"I have {st.session_state.prog_exp} years of programming experience.")
-    st.session_state.ml_exp = st.slider("How many years of ML experience do you have?", 0, 10, 2)
-    if st.button("Next"):
-        st.session_state.step += 1
-        st.experimental_rerun()
+    elif st.session_state.step == 4:
+        st.write(f"I am a {st.session_state.gender} with a {st.session_state.education} degree living in {st.session_state.country}.")
+        st.session_state.prog_exp = st.slider("How many years of programming experience do you have?", 0, 20, 3)
+        if st.button("Next"):
+            st.session_state.step += 1
+            st.experimental_rerun()
 
-elif st.session_state.step == 6:
-    st.write(f"I have {st.session_state.prog_exp} years of programming and {st.session_state.ml_exp} years of ML experience.")
-    st.session_state.age = st.slider("What is your age?", 18, 70, 30)
-    if st.button("Next"):
-        st.session_state.step += 1
-        st.experimental_rerun()
+    elif st.session_state.step == 5:
+        st.write(f"I have {st.session_state.prog_exp} years of programming experience.")
+        st.session_state.ml_exp = st.slider("How many years of ML experience do you have?", 0, 10, 2)
+        if st.button("Next"):
+            st.session_state.step += 1
+            st.experimental_rerun()
 
-elif st.session_state.step == 7:
-    st.write(f"I am {st.session_state.age} years old, with {st.session_state.prog_exp} years of programming and {st.session_state.ml_exp} years of ML experience.")
-    st.session_state.company_size = st.selectbox("What is your company size?", company_sizes)
-    if st.button("Next"):
-        st.session_state.step += 1
-        st.experimental_rerun()
+    elif st.session_state.step == 6:
+        st.write(f"I have {st.session_state.prog_exp} years of programming and {st.session_state.ml_exp} years of ML experience.")
+        st.session_state.age = st.slider("What is your age?", 18, 70, 30)
+        if st.button("Next"):
+            st.session_state.step += 1
+            st.experimental_rerun()
 
-elif st.session_state.step == 8:
-    st.write("📌 Select the programming languages you use:")
-    lang_options = ['Python', 'R', 'SQL', 'C', 'C++', 'Java', 'Javascript', 'Julia', 'Swift', 'Bash', 'MATLAB', 'C#', 'PHP']
-    st.session_state.selected_langs = [lang for lang in lang_options if st.checkbox(lang, value=False, key=f'lang_{lang}')]
-    if st.button("Next"):
-        st.session_state.step += 1
-        st.experimental_rerun()
+    elif st.session_state.step == 7:
+        st.write(f"I am {st.session_state.age} years old, with {st.session_state.prog_exp} years of programming and {st.session_state.ml_exp} years of ML experience.")
+        st.session_state.company_size = st.selectbox("What is your company size?", company_sizes)
+        if st.button("Next"):
+            st.session_state.step += 1
+            st.experimental_rerun()
 
-elif st.session_state.step == 9:
-    st.write("🖥️ Select your preferred IDEs:")
-    ide_options = ['Jupyter Notebook', 'RStudio', 'VSCode', 'PyCharm', 'Spyder', 'Notepad++', 'MATLAB']
-    st.session_state.selected_ides = [ide for ide in ide_options if st.checkbox(ide, value=False, key=f'ide_{ide}')]
-    if st.button("Next"):
-        st.session_state.step += 1
-        st.experimental_rerun()
+    elif st.session_state.step == 8:
+        st.write("📌 Select the programming languages you use:")
+        lang_options = ['Python', 'R', 'SQL', 'C', 'C++', 'Java', 'Javascript', 'Julia', 'Swift', 'Bash', 'MATLAB', 'C#', 'PHP']
+        st.session_state.selected_langs = [lang for lang in lang_options if st.checkbox(lang, value=False, key=f'lang_{lang}')]
+        if st.button("Next"):
+            st.session_state.step += 1
+            st.experimental_rerun()
 
-elif st.session_state.step == 10:
-    st.write("🤖 Select the ML frameworks you use:")
-    framework_options = ['Scikit-learn', 'TensorFlow', 'Keras', 'PyTorch', 'Xgboost', 'LightGBM', 'CatBoost']
-    st.session_state.selected_frameworks = [fw for fw in framework_options if st.checkbox(fw, value=False, key=f'fw_{fw}')]
-    if st.button("Next"):
-        st.session_state.step += 1
-        st.experimental_rerun()
+    elif st.session_state.step == 9:
+        st.write("🖥️ Select your preferred IDEs:")
+        ide_options = ['Jupyter Notebook', 'RStudio', 'VSCode', 'PyCharm', 'Spyder', 'Notepad++', 'MATLAB']
+        st.session_state.selected_ides = [ide for ide in ide_options if st.checkbox(ide, value=False, key=f'ide_{ide}')]
+        if st.button("Next"):
+            st.session_state.step += 1
+            st.experimental_rerun()
 
-elif st.session_state.step == 11:
-    st.write("📊 Select the ML algorithms you use:")
-    algo_options = ['Linear Regression', 'Random Forest', 'XGBoost', 'Neural Networks', 'Transformers']
-    st.session_state.selected_algos = [algo for algo in algo_options if st.checkbox(algo, value=False, key=f'algo_{algo}')]
-    if st.button("Next"):
-        st.session_state.step += 1
-        st.experimental_rerun()
+    elif st.session_state.step == 10:
+        st.write("🤖 Select the ML frameworks you use:")
+        framework_options = ['Scikit-learn', 'TensorFlow', 'Keras', 'PyTorch', 'Xgboost', 'LightGBM', 'CatBoost']
+        st.session_state.selected_frameworks = [fw for fw in framework_options if st.checkbox(fw, value=False, key=f'fw_{fw}')]
+        if st.button("Next"):
+            st.session_state.step += 1
+            st.experimental_rerun()
 
-elif st.session_state.step == 12:
-    st.write("🎓 Select the learning platforms you use:")
-    platform_options = ['Coursera', 'edX', 'Kaggle Learn', 'DataCamp', 'Udacity', 'Udemy', 'LinkedIn Learning']
-    st.session_state.selected_platforms = [platform for platform in platform_options if st.checkbox(platform, value=False, key=f'platform_{platform}')]
-    if st.button("Predict Salary"):
-        st.session_state.step += 1
-        st.experimental_rerun()
+    elif st.session_state.step == 11:
+        st.write("📊 Select the ML algorithms you use:")
+        algo_options = ['Linear Regression', 'Random Forest', 'XGBoost', 'Neural Networks', 'Transformers']
+        st.session_state.selected_algos = [algo for algo in algo_options if st.checkbox(algo, value=False, key=f'algo_{algo}')]
+        if st.button("Next"):
+            st.session_state.step += 1
+            st.experimental_rerun()
 
-elif st.session_state.step == 13:
-    # Create user input dataframe
-    user_input = pd.DataFrame({
-        "Programming_Experience_Midpoint": [st.session_state.prog_exp],
-        "ML_Experience_Midpoint": [st.session_state.ml_exp],
-        "Company_Size": [company_size_map[st.session_state.company_size]],
-        "Age_Midpoint": [st.session_state.age],
-        "Gender": [st.session_state.gender],
-        "Education": [st.session_state.education],
-        "Country": [st.session_state.country]
-    })
+    elif st.session_state.step == 12:
+        st.write("🎓 Select the learning platforms you use:")
+        platform_options = ['Coursera', 'edX', 'Kaggle Learn', 'DataCamp', 'Udacity', 'Udemy', 'LinkedIn Learning']
+        st.session_state.selected_platforms = [platform for platform in platform_options if st.checkbox(platform, value=False, key=f'platform_{platform}')]
+        if st.button("Predict Salary"):
+            st.session_state.step += 1
+            st.experimental_rerun()
 
-    # Convert categorical features to one-hot encoding
-    user_input = pd.get_dummies(user_input, columns=["Education", "Country", "Gender"])
+    elif st.session_state.step == 13:
+        # Create user input dataframe
+        user_input = pd.DataFrame({
+            "Programming_Experience_Midpoint": [st.session_state.prog_exp],
+            "ML_Experience_Midpoint": [st.session_state.ml_exp],
+            "Company_Size": [company_size_map[st.session_state.company_size]],
+            "Age_Midpoint": [st.session_state.age],
+            "Gender": [st.session_state.gender],
+            "Education": [st.session_state.education],
+            "Country": [st.session_state.country]
+        })
 
-    # Merge checkboxes
-    for key in st.session_state.selected_langs + st.session_state.selected_ides + st.session_state.selected_frameworks + st.session_state.selected_algos + st.session_state.selected_platforms:
-        user_input[key] = 1
+        # Convert categorical features to one-hot encoding
+        user_input = pd.get_dummies(user_input, columns=["Education", "Country", "Gender"])
 
-    # Ensure user input matches model's features
-    for col in feature_list:
-        if col not in user_input.columns:
-            user_input[col] = 0
+        # Merge checkboxes
+        for key in st.session_state.selected_langs + st.session_state.selected_ides + st.session_state.selected_frameworks + st.session_state.selected_algos + st.session_state.selected_platforms:
+            user_input[key] = 1
 
-    user_input = user_input[feature_list]
+        # Ensure user input matches model's features
+        for col in feature_list:
+            if col not in user_input.columns:
+                user_input[col] = 0
 
-    # Predict salary
-    salary_prediction = salary_model.predict(user_input)
-    
-    # Display final result
-    st.markdown(f"## 📌 Predicted Salary: **${salary_prediction[0]:,.2f}** 💰")
+        user_input = user_input[feature_list]
+
+        # Predict salary
+        salary_prediction = salary_model.predict(user_input)
+        
+        # Display final result
+        st.markdown(f"## 📌 Predicted Salary: **${salary_prediction[0]:,.2f}** 💰")
 
 # ----- ROLE PREDICTION -----
 elif page == "Role Prediction":
