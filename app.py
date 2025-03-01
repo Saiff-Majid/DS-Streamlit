@@ -148,6 +148,7 @@ elif page == "Exploratory Data Analysis":
     """)
 
 # ----- SALARY PREDICTION -----
+
 elif page == "Salary Prediction":
     st.title("💰 Salary Prediction")
     st.write("Enter your details to estimate your expected salary.")
@@ -155,8 +156,7 @@ elif page == "Salary Prediction":
     # Load model & feature list
     salary_model = joblib.load("salary_model.pkl")
     feature_list = salary_model.feature_names_in_
-    
-    # Create two columns for better visualization
+
     col1, col2 = st.columns(2)
     
     with col1:
@@ -170,36 +170,30 @@ elif page == "Salary Prediction":
             "Company Size",
             ["0-49 employees", "50-249 employees", "250-999 employees", "1000-9,999 employees", "10,000 or more employees"]
         )
-    
-    with col2:
-        prog_exp = st.slider("Programming Experience (Years)", 0, 20, 3, help="Select your programming experience in years.")
-        ml_exp = st.slider("ML Experience (Years)", 0, 10, 2, help="Select your ML experience in years.")
-        age = st.slider("Age", 18, 70, 30, help="Select your age.")
+        prog_exp = st.slider("Programming Experience (Years)", 0, 20, 3)
+        ml_exp = st.slider("ML Experience (Years)", 0, 10, 2)
+        age = st.slider("Age", 18, 70, 30)
 
-    # Organizing checkbox sections into two columns
-    col1, col2 = st.columns(2)
-    
-    with col1:
-        st.subheader("📌 Programming Languages Used:")
-        lang_options = ['Python', 'R', 'SQL', 'C', 'C++', 'Java', 'Javascript', 'Julia', 'Swift', 'Bash', 'MATLAB', 'C#', 'PHP']
-        selected_langs = [lang for lang in lang_options if st.checkbox(lang, value=False, key=f'lang_{lang}')]
-        
-        st.subheader("🖥️ Preferred IDEs:")
-        ide_options = ['Jupyter Notebook', 'RStudio', 'VSCode', 'PyCharm', 'Spyder', 'Notepad++', 'MATLAB']
-        selected_ides = [ide for ide in ide_options if st.checkbox(ide, value=False, key=f'ide_{ide}')]
-    
-    with col2:
         st.subheader("🤖 ML Frameworks Used:")
         framework_options = ['Scikit-learn', 'TensorFlow', 'Keras', 'PyTorch', 'Xgboost', 'LightGBM', 'CatBoost']
-        selected_frameworks = [fw for fw in framework_options if st.checkbox(fw, value=False, key=f'fw_{fw}')]
+        selected_frameworks = {f'Framework - {fw}': st.checkbox(fw, key=f'fw_{fw}') for fw in framework_options}
         
         st.subheader("📊 ML Algorithms Used:")
         algo_options = ['Linear Regression', 'Random Forest', 'XGBoost', 'Neural Networks', 'Transformers']
-        selected_algos = [algo for algo in algo_options if st.checkbox(algo, value=False, key=f'algo_{algo}')]
+        selected_algos = {f'Algorithm - {algo}': st.checkbox(algo, key=f'algo_{algo}') for algo in algo_options}
+    
+    with col2:
+        st.subheader("📌 Programming Languages Used:")
+        lang_options = ['Python', 'R', 'SQL', 'C', 'C++', 'Java', 'Javascript', 'Julia', 'Swift', 'Bash', 'MATLAB', 'C#', 'PHP']
+        selected_langs = {f'Language - {lang}': st.checkbox(lang, key=f'lang_{lang}') for lang in lang_options}
+        
+        st.subheader("🖥️ Preferred IDEs:")
+        ide_options = ['Jupyter Notebook', 'RStudio', 'VSCode', 'PyCharm', 'Spyder', 'Notepad++', 'MATLAB']
+        selected_ides = {f'IDE - {ide}': st.checkbox(ide, key=f'ide_{ide}') for ide in ide_options}
         
         st.subheader("🎓 Learning Platforms Used:")
         platform_options = ['Coursera', 'edX', 'Kaggle Learn', 'DataCamp', 'Udacity', 'Udemy', 'LinkedIn Learning']
-        selected_platforms = [platform for platform in platform_options if st.checkbox(platform, value=False, key=f'platform_{platform}')]
+        selected_platforms = {f'Learning - {platform}': st.checkbox(platform, key=f'platform_{platform}') for platform in platform_options}
     
     if st.button("Predict"):
         # Mapping categorical inputs
@@ -207,7 +201,6 @@ elif page == "Salary Prediction":
             "0-49 employees": 25, "50-249 employees": 150, "250-999 employees": 625,
             "1000-9,999 employees": 5500, "10,000 or more employees": 10000
         }
-        gender_map = {"Male": 1, "Female": 0, "Other": 2}
         
         # Create user input dataframe
         user_input = pd.DataFrame({
@@ -222,12 +215,16 @@ elif page == "Salary Prediction":
 
         # Convert categorical features to one-hot encoding
         user_input = pd.get_dummies(user_input, columns=["Education", "Country", "Gender"])
-
+        
+        # Merge with checkboxes inputs
+        for key, value in {**selected_langs, **selected_ides, **selected_frameworks, **selected_algos, **selected_platforms}.items():
+            user_input[key] = int(value)
+        
         # Ensure user input matches the trained model's features
         for col in feature_list:
             if col not in user_input.columns:
-                user_input[col] = 0
-
+                user_input[col] = 0  
+        
         # Reorder columns to match model input
         user_input = user_input[feature_list]
 
@@ -243,20 +240,16 @@ elif page == "Salary Prediction":
         summary += f"You work in a company with <b><u>{company_size}</u></b>. "
         summary += f"You are <b><u>{age}</u></b> years old. "
         
-        if selected_langs:
-            summary += f"You use the following programming languages: <b><u>{', '.join(selected_langs)}</u></b>. "
-        if selected_ides:
-            summary += f"Your preferred IDEs are: <b><u>{', '.join(selected_ides)}</u></b>. "
-        if selected_frameworks:
-            summary += f"You work with ML frameworks such as <b><u>{', '.join(selected_frameworks)}</u></b>. "
-        if selected_algos:
-            summary += f"You have experience with ML algorithms like <b><u>{', '.join(selected_algos)}</u></b>. "
-        if selected_platforms:
-            summary += f"You use learning platforms including <b><u>{', '.join(selected_platforms)}</u></b>. "
+        for category, selections in zip(
+            ["Languages", "IDEs", "Frameworks", "Algorithms", "Learning Platforms"],
+            [selected_langs, selected_ides, selected_frameworks, selected_algos, selected_platforms]
+        ):
+            used_items = [key.split(' - ')[1] for key, val in selections.items() if val]
+            if used_items:
+                summary += f"You use {category.lower()} like: <b><u>{', '.join(used_items)}</u></b>. "
         
         summary += "</div>"
         st.markdown(summary, unsafe_allow_html=True)
-
 
 
 
@@ -267,10 +260,9 @@ elif page == "Role Prediction":
 
     # Load trained model & label encoder
     role_model = joblib.load("role_model.pkl")
-    label_encoder = joblib.load("role_label_encoder.pkl")  # Load the label encoder
+    label_encoder = joblib.load("role_label_encoder.pkl")
     role_feature_list = role_model.feature_names_in_
 
-    # Create two columns for better visualization
     col1, col2 = st.columns(2)
     
     with col1:
@@ -280,67 +272,62 @@ elif page == "Role Prediction":
             ["High School", "Some College", "Bachelor", "Master", "PhD", "Professional", "Professional Doctorate"]
         )
         country = st.selectbox("Country", df["Country"].unique())
-    
-    with col2:
         prog_exp = st.slider("Programming Experience (Years)", 0, 20, 3)
         ml_exp = st.slider("ML Experience (Years)", 0, 10, 2)
         age = st.slider("Age", 18, 70, 30)
-    
-    # Organizing checkbox sections into two columns
-    col1, col2 = st.columns(2)
-    
-    with col1:
-        st.subheader("📌 Programming Languages Used:")
-        lang_options = ['Python', 'R', 'SQL', 'C', 'C++', 'Java', 'Javascript', 'Julia', 'Swift', 'Bash', 'MATLAB', 'C#', 'PHP']
-        selected_langs = [lang for lang in lang_options if st.checkbox(lang, value=False, key=f'lang_{lang}')]
-        
+
         st.subheader("🖥️ Preferred IDEs:")
         ide_options = ['Jupyter Notebook', 'RStudio', 'VSCode', 'PyCharm', 'Spyder', 'Notepad++', 'MATLAB']
-        selected_ides = [ide for ide in ide_options if st.checkbox(ide, value=False, key=f'ide_{ide}')]
-    
-    with col2:
+        selected_ides = {f'IDE - {ide}': st.checkbox(ide, key=f'ide_{ide}') for ide in ide_options}
+
         st.subheader("🤖 ML Frameworks Used:")
         framework_options = ['Scikit-learn', 'TensorFlow', 'Keras', 'PyTorch', 'Xgboost', 'LightGBM', 'CatBoost']
-        selected_frameworks = [fw for fw in framework_options if st.checkbox(fw, value=False, key=f'fw_{fw}')]
-        
+        selected_frameworks = {f'Framework - {fw}': st.checkbox(fw, key=f'fw_{fw}') for fw in framework_options}
+
+    with col2:
+        st.subheader("📌 Programming Languages Used:")
+        lang_options = ['Python', 'R', 'SQL', 'C', 'C++', 'Java', 'Javascript', 'Julia', 'Swift', 'Bash', 'MATLAB', 'C#', 'PHP']
+        selected_langs = {f'Language - {lang}': st.checkbox(lang, key=f'lang_{lang}') for lang in lang_options}
+
         st.subheader("📊 ML Algorithms Used:")
-        algo_options = ['Linear Regression', 'Random Forest', 'XGBoost', 'Neural Networks', 'Transformers']
-        selected_algos = [algo for algo in algo_options if st.checkbox(algo, value=False, key=f'algo_{algo}')]
-        
+        algo_options = ['Linear or Logistic Regression', 'Decision Trees or Random Forests', 'Gradient Boosting Machines', 'Bayesian Approaches', 'Neural Networks', 'Transformers']
+        selected_algos = {f'Algorithm - {algo}': st.checkbox(algo, key=f'algo_{algo}') for algo in algo_options}
+
         st.subheader("🎓 Learning Platforms Used:")
         platform_options = ['Coursera', 'edX', 'Kaggle Learn', 'DataCamp', 'Udacity', 'Udemy', 'LinkedIn Learning']
-        selected_platforms = [platform for platform in platform_options if st.checkbox(platform, value=False, key=f'platform_{platform}')]
+        selected_platforms = {f'Learning - {platform}': st.checkbox(platform, key=f'platform_{platform}') for platform in platform_options}
     
+    # Mapping categorical inputs
+    gender_map = {"Male": 1, "Female": 0, "Other": 2}
+
+    # Create user input dataframe
+    user_input = pd.DataFrame({
+        "Programming_Experience_Midpoint": [prog_exp],
+        "ML_Experience_Midpoint": [ml_exp],
+        "Age_Midpoint": [age],
+        "Gender": [gender],
+        "Education": [education],
+        "Country": [country]
+    })
+
+    # Convert categorical features to one-hot encoding
+    user_input = pd.get_dummies(user_input, columns=["Education", "Country", "Gender"])
+
+    # Merge with checkboxes inputs
+    for key, value in {**selected_langs, **selected_ides, **selected_frameworks, **selected_algos, **selected_platforms}.items():
+        user_input[key] = int(value)
+
+    # Ensure user input matches the trained model's features
+    for col in role_feature_list:
+        if col not in user_input.columns:
+            user_input[col] = 0  
+
+    # Reorder columns to match model input
+    user_input = user_input[role_feature_list]
+
     if st.button("Predict My Role"):
-        # Mapping categorical inputs
-        gender_map = {"Male": 1, "Female": 0, "Other": 2}
-        
-        # Create user input dataframe
-        user_input = pd.DataFrame({
-            "Programming_Experience_Midpoint": [prog_exp],
-            "ML_Experience_Midpoint": [ml_exp],
-            "Age_Midpoint": [age],
-            "Gender": [gender],
-            "Education": [education],
-            "Country": [country]
-        })
-        
-        # Convert categorical features to one-hot encoding
-        user_input = pd.get_dummies(user_input, columns=["Education", "Country", "Gender"])
-        
-        # Ensure user input matches the trained model's features
-        for col in role_feature_list:
-            if col not in user_input.columns:
-                user_input[col] = 0
-        
-        # Reorder columns to match model input
-        user_input = user_input[role_feature_list]
-        
-        # Predict role
         role_prediction_encoded = role_model.predict(user_input)[0]
         predicted_role = label_encoder.inverse_transform([role_prediction_encoded])[0]
-        
-        # Display Prediction
         st.markdown(f"## 🎯 Recommended Role: **{predicted_role}**")
         
         # Generate summary paragraph
@@ -348,20 +335,22 @@ elif page == "Role Prediction":
         summary += f"You have <b><u>{prog_exp}</u></b> years of programming experience and <b><u>{ml_exp}</u></b> years of ML experience. "
         summary += f"You are <b><u>{age}</u></b> years old. "
         
-        if selected_langs:
-            summary += f"You use the following programming languages: <b><u>{', '.join(selected_langs)}</u></b>. "
-        if selected_ides:
-            summary += f"Your preferred IDEs are: <b><u>{', '.join(selected_ides)}</u></b>. "
-        if selected_frameworks:
-            summary += f"You work with ML frameworks such as <b><u>{', '.join(selected_frameworks)}</u></b>. "
-        if selected_algos:
-            summary += f"You have experience with ML algorithms like <b><u>{', '.join(selected_algos)}</u></b>. "
-        if selected_platforms:
-            summary += f"You use learning platforms including <b><u>{', '.join(selected_platforms)}</u></b>. "
+        if any(selected_langs.values()):
+            summary += f"You use: <b><u>{', '.join([key.split(' - ')[1] for key, val in selected_langs.items() if val])}</u></b>. "
+        if any(selected_ides.values()):
+            summary += f"Preferred IDEs: <b><u>{', '.join([key.split(' - ')[1] for key, val in selected_ides.items() if val])}</u></b>. "
+        if any(selected_frameworks.values()):
+            summary += f"ML Frameworks: <b><u>{', '.join([key.split(' - ')[1] for key, val in selected_frameworks.items() if val])}</u></b>. "
+        if any(selected_algos.values()):
+            summary += f"ML Algorithms: <b><u>{', '.join([key.split(' - ')[1] for key, val in selected_algos.items() if val])}</u></b>. "
+        if any(selected_platforms.values()):
+            summary += f"Learning Platforms: <b><u>{', '.join([key.split(' - ')[1] for key, val in selected_platforms.items() if val])}</u></b>. "
         
         summary += "</div>"
         st.markdown(summary, unsafe_allow_html=True)
         
+
+
 # ----- CONCLUSION -----
 elif page == "Conclusion":
     st.title("📌 Conclusion & Future Work")
