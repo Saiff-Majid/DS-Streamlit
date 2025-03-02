@@ -17,7 +17,7 @@ df = pd.read_csv("df_cleaned.csv")
 st.sidebar.title("Navigation")
 page = st.sidebar.radio(
     "Go to", 
-    ["Introduction", "Data Preprocessing & Cleaning", "Exploratory Data Analysis", "Salary Prediction", "Role Prediction", "Conclusion"]
+    ["Introduction", "Data Preprocessing & Cleaning", "Exploratory Data Analysis", "Salary Prediction Analysis", "Salary Prediction", "Role Prediction Analysis", "Role Prediction", "Conclusion"]
 )
 
 # ----- INTRODUCTION -----
@@ -147,6 +147,51 @@ elif page == "Exploratory Data Analysis":
     Majority of those working as **Research Scientists and Professors** had **PhD** as their highest education level.
     """)
 
+
+# ----- SALARY PREDICTION ANALYSIS -----
+elif page == "Salary Prediction Analysis":
+    st.title("📊 Salary Prediction Analysis")
+    st.markdown("""
+    ## **Overview**
+    - The goal was to **predict salaries** based on demographic and technical features.
+    - Used **Machine Learning models** like **XGBoost, Random Forest, and LightGBM**.
+    - The best model achieved **high accuracy (R² = 0.997)**.
+    
+    ## **Data Preparation & Preprocessing**
+    - **Dropped unnecessary columns** like categorical groupings.
+    - **Encoded categorical features** (One-hot encoding for Education, Country, Gender).
+    - **Standardized numerical values** (Programming Experience, ML Experience, Company Size, Age).
+    
+    ## **Model Selection & Tuning**
+    - **Tried multiple models**: Linear Regression, LightGBM, Random Forest, XGBoost.
+    - **XGBoost performed best** after **hyperparameter tuning**.
+    - Used **feature importance analysis** to identify key predictors:
+      - **Country, Company Size, ML Frameworks (JAX), and Programming Experience** were the most significant.
+    
+    ## **Results**
+    - The **final model** explained **99.7% of salary variance (R² = 0.997)**.
+    - **Feature Importance:**
+    """)
+    
+    # Feature Importance Visualization
+
+    salary_feature_importance = pd.DataFrame({
+        "Feature": salary_model.feature_names_in_,
+        "Importance": salary_model.feature_importances_
+    }).sort_values(by="Importance", ascending=False)
+
+    fig_salary_importance = px.bar(salary_feature_importance, x="Feature", y="Importance", title="Feature Importance for Salary Prediction")
+    st.plotly_chart(fig_salary_importance)
+    
+    st.markdown("""
+    ## **Conclusion**
+    - **Country & Company Size** play a huge role in salary.
+    - **Programming & ML experience** significantly affect earnings.
+    - **US salaries** are more stable in predictions because the dataset has more samples.
+    - **Lack of enough data** from some countries makes the model generalize slightly, sometimes overestimating salaries.
+    """)
+
+
 # ----- SALARY PREDICTION -----
 
 elif page == "Salary Prediction":
@@ -251,6 +296,47 @@ elif page == "Salary Prediction":
         summary += "</div>"
         st.markdown(summary, unsafe_allow_html=True)
 
+# ----- ROLE PREDICTION ANALYSIS -----
+elif page == "Role Prediction Analysis":
+    st.title("🧑‍💻 Role Prediction Analysis")
+    st.markdown("""
+    ## **Overview**
+    - The goal was to predict **job roles** based on skills, experience, and demographics.
+    - **More challenging than salary prediction** due to high overlap between job roles.
+    
+    ## **Data Preprocessing & Feature Engineering**
+    - **One-hot encoded categorical variables** (Education, Country, Gender).
+    - **Converted programming & ML experience** to numerical midpoints.
+    - **Company size was mapped to numerical values**.
+    
+    ## **Model Selection & Performance**
+    - Models used: **Logistic Regression, Random Forest, XGBoost, SVM**.
+    - **XGBoost performed best** with **48.16% accuracy**.
+    - **Challenges:** Overlapping job roles, imbalanced data.
+    
+    ## **Feature Importance**
+    - **Education (PhD)** was the strongest predictor, indicating advanced degrees have a clear impact on role classification.
+    - **Programming Languages (Python, R, Java, JavaScript)** were also highly influential, showing that language proficiency strongly correlates with specific roles.
+    - **ML Algorithms (CNNs, Gradient Boosting, Transformers)** had a notable impact, emphasizing the significance of specialized ML skills.
+    - **Company size & country had a smaller impact than expected**, meaning role assignments were less dependent on organization size compared to salary predictions.
+    """)
+    
+    # Feature Importance Visualization
+    role_feature_importance = pd.DataFrame({
+        "Feature": role_model.feature_names_in_,
+        "Importance": role_model.feature_importances_
+    }).sort_values(by="Importance", ascending=False)
+
+    fig_role_importance = px.bar(role_feature_importance, x="Feature", y="Importance", title="Feature Importance for Role Prediction")
+    st.plotly_chart(fig_role_importance)
+    
+    st.markdown("""
+    ## **Conclusion**
+    - **Education level (especially PhD) is the most significant factor** in role prediction.
+    - **Programming languages & ML frameworks play a major role** in differentiating job titles.
+    - **Company size & country influence role assignment but are not the strongest determinants**.
+    - Improving predictions would require **better-defined role classifications** and additional industry-specific variables.
+    """)
 
 
 # ----- ROLE PREDICTION -----
