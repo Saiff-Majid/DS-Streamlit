@@ -281,8 +281,8 @@ elif page == "Salary Prediction":
 
         #measure the prediction against the average salary
         average_salary= 47335.03
-        if avg_salary != 0:  # Avoid division by zero
-            salary_diff_percent = ((salary_prediction - avg_salary) / avg_salary) * 100
+        if average_salary != 0:  # Avoid division by zero
+            salary_diff_percent = ((salary_prediction - average_salary) / average_salary) * 100
         else:
             salary_diff_percent = 0
         
