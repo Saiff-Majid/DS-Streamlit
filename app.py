@@ -278,12 +278,20 @@ elif page == "Salary Prediction":
 
         # Display Prediction
         st.markdown(f"## 📌 Predicted Salary: **${salary_prediction[0]:,.2f}** 💰")
+
+        #measure the prediction against the average salary
+        average_salary= 47335.03
+        if avg_salary != 0:  # Avoid division by zero
+            salary_diff_percent = ((salary_prediction - avg_salary) / avg_salary) * 100
+        else:
+            salary_diff_percent = 0
         
         # Generate summary paragraph
         summary = f"<div style='font-size:22px'>You are a <b><u>{gender}</u></b> with a <b><u>{education}</u></b> degree from <b><u>{country}</u></b>. "
         summary += f"You have <b><u>{prog_exp}</u></b> years of programming experience and <b><u>{ml_exp}</u></b> years of ML experience. "
         summary += f"You work in a company with <b><u>{company_size}</u></b>. "
         summary += f"You are <b><u>{age}</u></b> years old. "
+        summary += f"<br><br>Your predicted salary is <b><u>${predicted_salary:,.2f}</u></b>, which is <b><u>{salary_diff_percent:.2f}%</u></b> more than the average salary of other participants."
         
         for category, selections in zip(
             ["Languages", "IDEs", "Frameworks", "Algorithms", "Learning Platforms"],
