@@ -281,8 +281,9 @@ elif page == "Salary Prediction":
 
         #measure the prediction against the average salary
         average_salary= 47335.03
+        predicted_salary = salary_prediction[0]
         if average_salary != 0:  # Avoid division by zero
-            salary_diff_percent = ((salary_prediction - average_salary) / average_salary) * 100
+            salary_diff_percent = ((predicted_salary - average_salary) / average_salary) * 100
         else:
             salary_diff_percent = 0
         
@@ -291,7 +292,7 @@ elif page == "Salary Prediction":
         summary += f"You have <b><u>{prog_exp}</u></b> years of programming experience and <b><u>{ml_exp}</u></b> years of ML experience. "
         summary += f"You work in a company with <b><u>{company_size}</u></b>. "
         summary += f"You are <b><u>{age}</u></b> years old. "
-        summary += f"<br><br>Your predicted salary is <b><u>${salary_prediction:,.2f}</u></b>, which is <b><u>{salary_diff_percent:.2f}%</u></b> more than the average salary of other participants."
+        summary += f"<br><br>Your predicted salary is <b><u>${predicted_salary:,.2f}</u></b>, which is <b><u>{salary_diff_percent:.2f}%</u></b> more than the average salary of other participants."
         
         for category, selections in zip(
             ["Languages", "IDEs", "Frameworks", "Algorithms", "Learning Platforms"],
