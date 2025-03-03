@@ -282,10 +282,7 @@ elif page == "Salary Prediction":
         #measure the prediction against the average salary
         average_salary= 47335.03
         predicted_salary = salary_prediction[0]
-        if average_salary != 0:  # Avoid division by zero
-            salary_diff_percent = ((predicted_salary - average_salary) / average_salary) * 100
-        else:
-            salary_diff_percent = 0
+        salary_diff_percent = ((predicted_salary - average_salary) / average_salary) * 100
         
         # Generate summary paragraph
         summary = f"<div style='font-size:22px'>You are a <b><u>{gender}</u></b> with a <b><u>{education}</u></b> degree from <b><u>{country}</u></b>. "
