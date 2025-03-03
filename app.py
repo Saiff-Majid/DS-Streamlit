@@ -417,15 +417,44 @@ elif page == "Role Prediction":
     # Reorder columns to match model input
     user_input = user_input[role_feature_list]
 
+    # role percentage dictionary for summary
+    role_percentages = {
+        "Student": 20.62,
+        "Data Scientist": 15.81,
+        "Software Engineer": 10.21,
+        "Data Analyst": 9.49,
+        "Unemployed": 8.73,
+        "Other": 8.05,
+        "Research Scientist": 6.12,
+        "Machine Learning Engineer": 5.95,
+        "Business Analyst": 2.90,
+        "Data Engineer": 2.76,
+        "Project Manager": 2.68,
+        "Teacher/Professor": 1.50,
+        "Manager": 1.46,
+        "Statistician": 1.29,
+        "Engineer": 0.76,
+        "Product Manager": 0.54,
+        "Database Engineer": 0.54,
+        "Developer Advocate": 0.30,
+        "Data Architect": 0.19,
+        "Data Administrator": 0.11
+    }
+
     if st.button("Predict My Role"):
         role_prediction_encoded = role_model.predict(user_input)[0]
         predicted_role = label_encoder.inverse_transform([role_prediction_encoded])[0]
         st.markdown(f"## 🎯 Recommended Role: **{predicted_role}**")
+
+         # Calculate the percentage of respondents with this role
+        predicted_role_percentage = role_percentages.get(predicted_role, 0)
         
         # Generate summary paragraph
         summary = f"<div style='font-size:22px'>You are a <b><u>{gender}</u></b> with a <b><u>{education}</u></b> degree from <b><u>{country}</u></b>. "
         summary += f"You have <b><u>{prog_exp}</u></b> years of programming experience and <b><u>{ml_exp}</u></b> years of ML experience. "
         summary += f"You are <b><u>{age}</u></b> years old. "
+        summary += f"<br><br>Your predicted role is **{predicted_role}**, which you share with <b><u>{predicted_role_percentage:.2f}%</u></b> of survey respondents."
+
         
         if any(selected_langs.values()):
             summary += f"You use: <b><u>{', '.join([key.split(' - ')[1] for key, val in selected_langs.items() if val])}</u></b>. "
