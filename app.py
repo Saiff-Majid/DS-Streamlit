@@ -103,7 +103,7 @@ elif page == "Data Preprocessing & Cleaning":
 
     st.write("Once combined we had a DataFrame like this.")
     
-    image_1=image.open(".DS-Streamlit/Screenshot.png") 
+    image_1=Image.open(".DS-Streamlit/Screenshot.png") 
     st.image(image_1,caption="DF_combined.head()")
     
 
