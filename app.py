@@ -274,22 +274,39 @@ elif page == "Salary Prediction":
         user_input = user_input[feature_list]
 
         # Predict salary
-        salary_prediction = salary_model.predict(user_input)
+        salary_prediction = float(salary_model.predict(user_input)[0])
 
         # Display Prediction
-        st.markdown(f"## 📌 Predicted Salary: **${salary_prediction[0]:,.2f}** 💰")
+        st.markdown(f"## 📌 Predicted Salary: **${salary_prediction:,.2f}** 💰")
 
-        #measure the prediction against the average salary
-        average_salary= 47335.03
-        predicted_salary = salary_prediction[0]
-        salary_diff_percent = ((predicted_salary - average_salary) / average_salary) * 100
+        # #measure the prediction against the average salary
+        # average_salary= 47335.03
+        # predicted_salary = salary_prediction
+        # salary_diff_percent = ((predicted_salary - average_salary) / average_salary) * 100
         
+        # Compute comparison to average salary for similar age group in the same country
+        age_category = "18-24" if age < 25 else "25-34" if age < 35 else "35-44" if age < 45 else "45-54" if age < 55 else "55+"
+        
+        df_filtered = df[(df["Country"] == country) & (df["Age_Midpoint"].between(age - 3, age + 3))]
+        
+        if not df_filtered.empty:
+            avg_salary_same_group = df_filtered["Average_Salary"].mean()
+            salary_diff_age_group = ((salary_prediction - avg_salary_same_group) / avg_salary_same_group) * 100
+
+            
+            salary_diff_age_group = float(salary_diff_age_group)
+
+            salary_diff_text = "more" if salary_prediction > avg_salary_same_group else "less"
+            salary_diff_statement = f"Your predicted salary is <b><u>{salary_diff_text}</u></b> by <b><u>{abs(salary_diff_age_group):.2f}%</u></b> compared to participants in your country within the same age category <u><b>({age_category})</u></b>."
+        else:
+            salary_diff_statement = "There is not enough data to compare your salary prediction with others in your country and age group."
+            
+
         # Generate summary paragraph
         summary = f"<div style='font-size:22px'>You are a <b><u>{gender}</u></b> with a <b><u>{education}</u></b> degree from <b><u>{country}</u></b>. "
         summary += f"You have <b><u>{prog_exp}</u></b> years of programming experience and <b><u>{ml_exp}</u></b> years of ML experience. "
         summary += f"You work in a company with <b><u>{company_size}</u></b>. "
         summary += f"You are <b><u>{age}</u></b> years old. "
-        summary += f"<br><br>Your predicted salary is <b><u>${predicted_salary:,.2f}</u></b>, which is <b><u>{salary_diff_percent:.2f}%</u></b> compared to the average salary of other participants."
         
         for category, selections in zip(
             ["Languages", "IDEs", "Frameworks", "Algorithms", "Learning Platforms"],
@@ -299,8 +316,40 @@ elif page == "Salary Prediction":
             if used_items:
                 summary += f"You use {category.lower()} like: <b><u>{', '.join(used_items)}</u></b>. "
         
+        summary += f"<br><br>Your predicted salary is <b><u>${salary_prediction:,.2f}</u></b>. {salary_diff_statement}"
+        
         summary += "</div>"
         st.markdown(summary, unsafe_allow_html=True)
+
+        # visualization for salary comparision
+
+        if not df_filtered.empty:
+            
+            salary_comparison_df = pd.DataFrame({
+                "Category": ["Average Salary (Same Age & Country)", "Predicted Salary"],
+                "Salary (USD)": [avg_salary_same_group, salary_prediction]
+            })
+
+            
+            fig_salary_comparison = px.bar(
+                salary_comparison_df,
+                x="Category",
+                y="Salary (USD)",
+                title=f"Salary Comparison: Predicted vs Average ({age_category}) in {country}",
+                color="Category",
+                text_auto=True  
+            )
+
+            
+            fig_salary_comparison.update_layout(
+                yaxis_title="Salary (USD)",
+                xaxis_title="Category",
+                bargap=0.4,
+                template="plotly_white"
+            )
+
+            
+            st.plotly_chart(fig_salary_comparison)
 
 # ----- ROLE PREDICTION ANALYSIS -----
 elif page == "Role Prediction Analysis":
