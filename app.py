@@ -278,11 +278,7 @@ elif page == "Salary Prediction":
 
         # Display Prediction
         st.markdown(f"## 📌 Predicted Salary: **${salary_prediction:,.2f}** 💰")
-
-        # #measure the prediction against the average salary
-        # average_salary= 47335.03
-        # predicted_salary = salary_prediction
-        # salary_diff_percent = ((predicted_salary - average_salary) / average_salary) * 100
+        
         
         # Compute comparison to average salary for similar age group in the same country
         age_category = "18-24" if age < 25 else "25-34" if age < 35 else "35-44" if age < 45 else "45-54" if age < 55 else "55+"
@@ -502,8 +498,6 @@ elif page == "Role Prediction":
         summary = f"<div style='font-size:22px'>You are a <b><u>{gender}</u></b> with a <b><u>{education}</u></b> degree from <b><u>{country}</u></b>. "
         summary += f"You have <b><u>{prog_exp}</u></b> years of programming experience and <b><u>{ml_exp}</u></b> years of ML experience. "
         summary += f"You are <b><u>{age}</u></b> years old. "
-        summary += f"<br><br>Your predicted role is **{predicted_role}**, which you share with <b><u>{predicted_role_percentage:.2f}%</u></b> of survey respondents."
-
         
         if any(selected_langs.values()):
             summary += f"You use: <b><u>{', '.join([key.split(' - ')[1] for key, val in selected_langs.items() if val])}</u></b>. "
@@ -515,7 +509,8 @@ elif page == "Role Prediction":
             summary += f"ML Algorithms: <b><u>{', '.join([key.split(' - ')[1] for key, val in selected_algos.items() if val])}</u></b>. "
         if any(selected_platforms.values()):
             summary += f"Learning Platforms: <b><u>{', '.join([key.split(' - ')[1] for key, val in selected_platforms.items() if val])}</u></b>. "
-        
+        summary += f"<br><br>Your predicted role is **{predicted_role}**, which you share with <b><u>{predicted_role_percentage:.2f}%</u></b> of survey respondents."
+
         summary += "</div>"
         st.markdown(summary, unsafe_allow_html=True)
         
