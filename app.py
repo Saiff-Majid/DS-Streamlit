@@ -102,9 +102,16 @@ elif page == "Data Preprocessing & Cleaning":
     st.code(code_2, language="python")
 
     st.write("Once combined we had a DataFrame like this.")
+    
     image_1=image.open(".devcontainer/Screenshot.png") 
     st.image(image_1,caption="DF_combined.head()")
-    
+    import os
+    image_path = ".devcontainer/Screenshot.png"
+    if os.path.exists(image_path):
+        print("File found!")
+    else:
+        print("File not found.")
+
 
     st.markdown("""
     ## **Steps in Preprocessing**
