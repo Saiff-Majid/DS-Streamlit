@@ -129,7 +129,7 @@ elif page == "Data Preprocessing & Cleaning":
        # ---- COMPARISON METRICS ----
     st.markdown("## 🔍 **Data Cleaning Impact: A Visual Breakdown**")
 
-    # --- Number of Entries Comparison ---
+    # ---  Number of Entries Comparison ---
     entries_before = df_merged.shape[0]
     entries_after = df.shape[0]
 
@@ -147,6 +147,7 @@ elif page == "Data Preprocessing & Cleaning":
     def get_column_types(df):
         type_counts = df.dtypes.value_counts().reset_index()
         type_counts.columns = ["Type", "Count"]  # Ensure correct column names
+        type_counts["Type"] = type_counts["Type"].astype(str)  # Convert types to string for Plotly
         return type_counts
 
     col_types_before = get_column_types(df_merged)
@@ -159,7 +160,7 @@ elif page == "Data Preprocessing & Cleaning":
     fig_col_types = px.bar(
         col_types_combined,
         x="Type",
-        y="Count",  # Ensure this matches the column name
+        y="Count",
         color="Dataset",
         barmode="group",
         title="🧩 Column Type Distribution Before vs After Cleaning",
@@ -171,7 +172,7 @@ elif page == "Data Preprocessing & Cleaning":
     missing_after = df.isna().sum()
 
     missing_df = pd.DataFrame({
-        "Column": df_merged.columns,
+        "Column": df_merged.columns.astype(str),  # Ensure column names are string
         "Missing Before": missing_before.values,
         "Missing After": missing_after.values
     })
@@ -192,8 +193,15 @@ elif page == "Data Preprocessing & Cleaning":
     df_before_stats = df_merged.describe().reset_index()
     df_after_stats = df.describe().reset_index()
 
+    # Convert all column names to string to avoid serialization issues
+    df_before_stats.columns = df_before_stats.columns.astype(str)
+    df_after_stats.columns = df_after_stats.columns.astype(str)
+
     df_stats_diff = df_before_stats.set_index("index") - df_after_stats.set_index("index")
     df_stats_diff = df_stats_diff.reset_index().melt(id_vars="index", var_name="Feature", value_name="Difference")
+
+    # Convert feature names to string before passing to Plotly
+    df_stats_diff["Feature"] = df_stats_diff["Feature"].astype(str)
 
     fig_stats = px.bar(
         df_stats_diff,
@@ -204,6 +212,7 @@ elif page == "Data Preprocessing & Cleaning":
         title="📉 Changes in Dataset Statistics Before vs After Cleaning"
     )
     st.plotly_chart(fig_stats)
+
 
 
 
