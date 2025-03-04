@@ -51,15 +51,15 @@ elif page == "Data Preprocessing & Cleaning":
     - 🔍 **Feature engineering** to make data useful for ML models
 
     ## **Steps in Preprocessing**
-    1️⃣ **Merged Kaggle Survey Data (2020-2022)**.  
+    **1.** **Merged Kaggle Survey Data (2020-2022)**.  
     
-    2️⃣ **Chose Relevant Questions**  
+    **2** **Chose Relevant Questions**  
     
-    3️⃣ **Identified & cleaned missing values**.
+    **3** **Identified & cleaned missing values**.
     
-    4️⃣ **Mapped job titles and education levels**. 
+    **4** **Mapped job titles and education levels**. 
     
-    5️⃣ **Extracted salary ranges and calculated averages**. 
+    **5** **Extracted salary ranges and calculated averages**. 
     """)
 
     
@@ -126,43 +126,96 @@ elif page == "Data Preprocessing & Cleaning":
     st.subheader("Sample Cleaned Data")
     st.dataframe(df.head())  
 
-    # Plotly comparision
-    st.markdown("## 🔍 **Comparison of Dataset Statistics Before & After**")
+    # ---- COMPARISON METRICS ----
+    st.markdown("## 🔍 **Data Cleaning Impact: A Visual Breakdown**")
 
-    # Compute statistics
-    df_before_desc = df_merged.describe().reset_index()
-    df_after_desc = df.describe().reset_index()
+    # --- NUMBER OF ENTRIES COMPARISON ---
+    entries_before = df_merged.shape[0]
+    entries_after = df.shape[0]
 
-    # Melt dataframes for better visualization
-    df_before_melted = df_before_desc.melt(id_vars="index", var_name="Feature", value_name="Before Cleaning")
-    df_after_melted = df_after_desc.melt(id_vars="index", var_name="Feature", value_name="After Cleaning")
+    fig_entries = px.bar(
+        x=["Before Cleaning", "After Cleaning"],
+        y=[entries_before, entries_after],
+        text=[entries_before, entries_after],
+        title="📊 Number of Entries Before vs After Cleaning",
+        labels={"x": "Dataset", "y": "Number of Entries"},
+        color=["Before Cleaning", "After Cleaning"]
+    )
+    st.plotly_chart(fig_entries)
 
-    # Merge melted dataframes
-    df_comparison = pd.merge(df_before_melted, df_after_melted, on=["index", "Feature"])
+    # --- COLUMN TYPE DISTRIBUTION ---
+    def get_column_types(df):
+        return df.dtypes.value_counts().reset_index().rename(columns={"index": "Type", 0: "Count"})
 
-    # Plotly bar chart for comparison
-    fig = px.bar(
-        df_comparison,
+    col_types_before = get_column_types(df_merged)
+    col_types_before["Dataset"] = "Before Cleaning"
+    col_types_after = get_column_types(df)
+    col_types_after["Dataset"] = "After Cleaning"
+
+    col_types_combined = pd.concat([col_types_before, col_types_after])
+
+    fig_col_types = px.bar(
+        col_types_combined,
+        x="Type",
+        y="Count",
+        color="Dataset",
+        barmode="group",
+        title="📊 Column Type Distribution Before vs After Cleaning",
+    )
+    st.plotly_chart(fig_col_types)
+
+    # --- MISSING VALUES COMPARISON ---
+    missing_before = df_merged.isna().sum()
+    missing_after = df.isna().sum()
+
+    missing_df = pd.DataFrame({
+        "Column": df_merged.columns,
+        "Missing Before": missing_before.values,
+        "Missing After": missing_after.values
+    })
+    missing_df = missing_df[missing_df["Missing Before"] > 0]  # Show only affected columns
+
+    fig_missing = px.bar(
+        missing_df.melt(id_vars=["Column"], var_name="Stage", value_name="Missing Values"),
+        x="Column",
+        y="Missing Values",
+        color="Stage",
+        barmode="group",
+        title="🚨 Missing Values Before vs After Cleaning"
+    )
+    st.plotly_chart(fig_missing)
+
+    # --- STATISTICAL COMPARISON ---
+    df_before_stats = df_merged.describe().reset_index()
+    df_after_stats = df.describe().reset_index()
+
+    df_stats_diff = df_before_stats.set_index("index") - df_after_stats.set_index("index")
+    df_stats_diff = df_stats_diff.reset_index().melt(id_vars="index", var_name="Feature", value_name="Difference")
+
+    fig_stats = px.bar(
+        df_stats_diff,
         x="index",
-        y=["Before Cleaning", "After Cleaning"],
+        y="Difference",
         color="Feature",
         barmode="group",
-        title="Statistical Comparison of Raw vs. Cleaned Data",
-        labels={"index": "Statistic", "value": "Value"},
+        title="📉 Changes in Dataset Statistics Before vs After Cleaning"
     )
+    st.plotly_chart(fig_stats)
 
-    st.plotly_chart(fig)
+
 
     
+
+
+
+# ----- EXPLORATORY DATA ANALYSIS -----
+elif page == "Exploratory Data Analysis":
+    # st.title("📊 Exploratory Data Analysis")
 
     st.write("### Data Distribution by Year")
     year_counts = df["Year"].value_counts()
     fig_year = px.bar(year_counts, x=year_counts.index, y=year_counts.values, labels={"x": "Year", "y": "Count"}, title="Survey Responses per Year")
     st.plotly_chart(fig_year)
-
-# ----- EXPLORATORY DATA ANALYSIS -----
-elif page == "Exploratory Data Analysis":
-    # st.title("📊 Exploratory Data Analysis")
 
     st.title("📊 Exploratory Data Analysis")
     st.markdown("## **Distribution of Role by Gender**")
