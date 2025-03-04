@@ -51,9 +51,13 @@ elif page == "Data Preprocessing & Cleaning":
 
     ## **Steps in Preprocessing**
     1️⃣ **Merged Kaggle Survey Data (2020-2022)**.  
+    
     2️⃣ **Chose Relevant Questions**  
+    
     3️⃣ **Identified & cleaned missing values**.
+    
     4️⃣ **Mapped job titles and education levels**. 
+    
     5️⃣ **Extracted salary ranges and calculated averages**. 
     """)
     
