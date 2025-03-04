@@ -54,9 +54,9 @@ elif page == "Data Preprocessing & Cleaning":
     2️⃣ **Chose Relevant Questions**  
     3️⃣ **Identified & cleaned missing values**.
     4️⃣ **Mapped job titles and education levels**. 
-    5⃣ **Extracted salary ranges and calculated averages**.  
+    5⃣ **Extracted salary ranges and calculated averages**.  5⃣
     """)
-
+    
     st.write("""The first step of the project was to figure out how to combine the three years of surveys.""")
     
     code_1="""
