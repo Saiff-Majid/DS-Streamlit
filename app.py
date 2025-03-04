@@ -212,14 +212,19 @@ elif page == "Data Preprocessing & Cleaning":
 elif page == "Exploratory Data Analysis":
     # st.title("📊 Exploratory Data Analysis")
 
+
+
+    st.title("📊 Exploratory Data Analysis")
+
+    # Data distribution by year
     st.write("### Data Distribution by Year")
     year_counts = df["Year"].value_counts()
     fig_year = px.bar(year_counts, x=year_counts.index, y=year_counts.values, labels={"x": "Year", "y": "Count"}, title="Survey Responses per Year")
     st.plotly_chart(fig_year)
 
-    st.title("📊 Exploratory Data Analysis")
+
+    # Role and Gender
     st.markdown("## **Distribution of Role by Gender**")
-    # Role_Title and Gender
     df_filtered = df[df["Gender"].isin(["Male", "Female"])]
 
     # Create the stacked bar chart
