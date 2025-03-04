@@ -51,9 +51,13 @@ elif page == "Data Preprocessing & Cleaning":
 
     ## **Steps in Preprocessing**
     1️⃣ **Merged Kaggle Survey Data (2020-2022)**.  
+    
     2️⃣ **Chose Relevant Questions**  
+    
     3️⃣ **Identified & cleaned missing values**.
+    
     4️⃣ **Mapped job titles and education levels**. 
+    
     5️⃣ **Extracted salary ranges and calculated averages**. 
     """)
 
@@ -108,17 +112,19 @@ elif page == "Data Preprocessing & Cleaning":
     print(f"Number of questions common across all three datasets: {len(common_questions_all)}")"""
     st.code(code_2, language="python")
 
-
     
     st.write("From the set of questions, we added a year category and created a common list we used to create a new Dataframe.")
     
+    st.markdown("""**BEFORE**""")
     image_1=Image.open("Screenshot.png")
     st.image(image_1,caption="DF_combined.head()")
 
     
-
+    st.markdown("""**AFTER**""")
     st.subheader("Sample Merged Data")
     st.dataframe(df.head())
+
+    
 
     st.write("### Data Distribution by Year")
     year_counts = df["Year"].value_counts()
