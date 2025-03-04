@@ -42,16 +42,19 @@ elif page == "Data Preprocessing & Cleaning":
     st.title("🛠️ Data Preprocessing & Cleaning")
     
     st.markdown("""
-    ## **Why Clean Data?**
-    - 🗑️ **Remove missing values**.
-    - 🔄 **Standardize categories** (e.g., role names).
-    - 🔍 **Feature engineering** to make data useful for ML models.
-    
+    ## **Clean or Preprocess too?**
+    - 🗑️ **Data set with String-Ranges and Multiple Choice**.
+    - 🔢 **Visualisations with categories needs more organisation**
+    - 🚫 **'False' NaNs** need One Hot-Encoding
+    - 🔄 **Standardize categories** (e.g., role names)
+    - 🔍 **Feature engineering** to make data useful for ML models
+
     ## **Steps in Preprocessing**
     1️⃣ **Merged Kaggle Survey Data (2020-2022)**.  
-    2️⃣ **Identified & cleaned missing values**.  
-    3️⃣ **Mapped job titles and education levels**.  
-    4️⃣ **Extracted salary ranges and calculated averages**.  
+    2️⃣ **Chose Relevant Questions**  
+    3️⃣ **Identified & cleaned missing values**.
+    4️⃣ **Mapped job titles and education levels**. 
+    5⃣ **Extracted salary ranges and calculated averages**.  
     """)
 
     st.write("""The first step of the project was to figure out how to combine the three years of surveys.""")
@@ -111,13 +114,6 @@ elif page == "Data Preprocessing & Cleaning":
     image_1=Image.open("Screenshot.png")
     st.image(image_1,caption="DF_combined.head()")
 
-    st.markdown("""
-    **Just Clean or Preprocess as well?**
-    *-"false" NaNs from multiple choice*
-    +-two types of questions*
-    *-Needing to order categorical data in visualisations*
-    *-Not all questions relevant*
-    """)
     
 
     st.subheader("Sample Merged Data")
