@@ -5,6 +5,7 @@ import joblib
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
+from PIL import Image
 
 # Load trained models
 salary_model = joblib.load("salary_model.pkl")  
