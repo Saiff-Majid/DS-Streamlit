@@ -117,6 +117,7 @@ elif page == "Data Preprocessing & Cleaning":
     +-two types of questions*
     *-Needing to order categorical data in visualisations*
     *-Not all questions relevant*
+    """)
     
 
     st.subheader("Sample Merged Data")
