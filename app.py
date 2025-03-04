@@ -44,8 +44,69 @@ elif page == "Data Preprocessing & Cleaning":
     ## **Why Clean Data?**
     - 🗑️ **Remove missing values**.
     - 🔄 **Standardize categories** (e.g., role names).
-    - 🔍 **Feature engineering** to make data useful for ML models.
+    - 🔍 **Feature engineering** to make data useful for ML models.""")
 
+    st.write("""The first step of the project was to figure out how to combine the three years of surveys. 
+             Not all the questions were identical, so we had to find a solution in python to compile them.""")
+    
+    code_1="""def extract_base_question(question):
+        return question.split('-')[0].strip()
+
+    # Function to get unique questions in the same order as they appear in the dataset
+    def get_unique_ordered_questions(columns):
+        seen = set()
+        unique_questions = []
+        for col in columns:
+            base_question = extract_base_question(col)
+            if base_question not in seen:
+                seen.add(base_question)
+                unique_questions.append(base_question)
+        return unique_questions
+
+
+    # Extract unique base questions in the same order for each dataset
+    unique_questions_2020 = get_unique_ordered_questions(df_2020.columns)
+    unique_questions_2021 = get_unique_ordered_questions(df_2021.columns)
+    unique_questions_2022 = get_unique_ordered_questions(df_2022.columns)
+
+    # Print the number of unique base questions for each dataset
+    print(f"Number of unique base questions in 2020 dataset: {len(unique_questions_2020)}")
+    print(f"Number of unique base questions in 2021 dataset: {len(unique_questions_2021)}")
+    print(f"Number of unique base questions in 2022 dataset: {len(unique_questions_2022)}")
+
+    # Print the unique base questions with a count for each dataset
+    def print_questions_with_count(questions, dataset_year):
+        print(f"\nUnique base questions for {dataset_year} dataset:")
+        for idx, question in enumerate(questions, start=1):
+            print(f"Q{idx}: {question}")
+
+    print_questions_with_count(unique_questions_2020, "2020")
+    print_questions_with_count(unique_questions_2021, "2021")
+    print_questions_with_count(unique_questions_2022, "2022")""" 
+
+    st.code(code_1, language="python")
+                
+    st.write("""Our code to create a set of unique questions for each year.""")
+
+    code_2= """#Convvert unique questions into sets
+    unique_set_2020 = set(unique_questions_2020)
+    unique_set_2021 = set(unique_questions_2021)
+    unique_set_2022 = set(unique_questions_2022)
+
+    # Find the intersection of the three sets to get common questions across all datasets
+    common_questions_all = unique_set_2022.intersection(unique_set_2021, unique_set_2020)
+
+    # Output the number of common questions and list them
+    print(f"Number of questions common across all three datasets: {len(common_questions_all)}")"""
+
+    st.code(code_2, language="python")
+
+    st.write("Once combined we had a DataFrame like this.")
+    image_1=Image.open(Screenshot 2025-03-03 10.53.45.png) 
+    st.image(image_1,caption="DF_combined.head()")
+    
+
+    st.markdown("""
     ## **Steps in Preprocessing**
     1️⃣ **Merged Kaggle Survey Data (2020-2022)**.  
     2️⃣ **Identified & cleaned missing values**.  
