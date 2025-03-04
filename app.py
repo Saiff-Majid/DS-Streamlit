@@ -51,17 +51,15 @@ elif page == "Data Preprocessing & Cleaning":
 
     ## **Steps in Preprocessing**
     1️⃣ **Merged Kaggle Survey Data (2020-2022)**.  
-    
     2️⃣ **Chose Relevant Questions**  
-    
     3️⃣ **Identified & cleaned missing values**.
-    
     4️⃣ **Mapped job titles and education levels**. 
-    
     5️⃣ **Extracted salary ranges and calculated averages**. 
     """)
+
     
-    st.write("""The first step of the project was to figure out how to combine the three years of surveys.""")
+    st.write("""The first step of the project was to figure out how to combine the three years of surveys.
+    Below is the code with the functions used to extract the base questions.""")
     
     code_1="""
     def extract_base_question(question):
@@ -95,7 +93,7 @@ elif page == "Data Preprocessing & Cleaning":
 
     st.code(code_1, language="python")
                 
-    st.write("""Our code to create a set of unique questions for each year.""")
+    st.write("""We had a total of 22 unique questions.""")
 
     code_2= """
     #Convvert unique questions into sets
@@ -110,10 +108,9 @@ elif page == "Data Preprocessing & Cleaning":
     print(f"Number of questions common across all three datasets: {len(common_questions_all)}")"""
     st.code(code_2, language="python")
 
-    st.write("We had a total of 22 unique questions per year.")
-    
 
-    st.write("Once we combined the sets we got a DataFrame like this.")
+    
+    st.write("From the set of questions, we added a year category and created a common list we used to create a new Dataframe.")
     
     image_1=Image.open("Screenshot.png")
     st.image(image_1,caption="DF_combined.head()")
