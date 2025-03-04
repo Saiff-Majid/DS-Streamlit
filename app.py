@@ -45,12 +45,19 @@ elif page == "Data Preprocessing & Cleaning":
     ## **Why Clean Data?**
     - 🗑️ **Remove missing values**.
     - 🔄 **Standardize categories** (e.g., role names).
-    - 🔍 **Feature engineering** to make data useful for ML models.""")
-
-    st.write("""The first step of the project was to figure out how to combine the three years of surveys. 
-             Not all the questions were identical, so we had to find a solution in python to compile them.""")
+    - 🔍 **Feature engineering** to make data useful for ML models.
     
-    code_1="""def extract_base_question(question):
+    ## **Steps in Preprocessing**
+    1️⃣ **Merged Kaggle Survey Data (2020-2022)**.  
+    2️⃣ **Identified & cleaned missing values**.  
+    3️⃣ **Mapped job titles and education levels**.  
+    4️⃣ **Extracted salary ranges and calculated averages**.  
+    """)
+
+    st.write("""The first step of the project was to figure out how to combine the three years of surveys.""")
+    
+    code_1="""
+    def extract_base_question(question):
         return question.split('-')[0].strip()
 
     # Function to get unique questions in the same order as they appear in the dataset
@@ -63,7 +70,6 @@ elif page == "Data Preprocessing & Cleaning":
                 seen.add(base_question)
                 unique_questions.append(base_question)
         return unique_questions
-
 
     # Extract unique base questions in the same order for each dataset
     unique_questions_2020 = get_unique_ordered_questions(df_2020.columns)
@@ -84,7 +90,8 @@ elif page == "Data Preprocessing & Cleaning":
                 
     st.write("""Our code to create a set of unique questions for each year.""")
 
-    code_2= """#Convvert unique questions into sets
+    code_2= """
+    #Convvert unique questions into sets
     unique_set_2020 = set(unique_questions_2020)
     unique_set_2021 = set(unique_questions_2021)
     unique_set_2022 = set(unique_questions_2022)
@@ -94,23 +101,23 @@ elif page == "Data Preprocessing & Cleaning":
 
     # Output the number of common questions and list them
     print(f"Number of questions common across all three datasets: {len(common_questions_all)}")"""
-
     st.code(code_2, language="python")
 
-    st.write("Once combined we had a DataFrame like this.")
+    st.write("We had a total of 22 unique questions per year.")
+    
+
+    st.write("Once we combined the sets we got a DataFrame like this.")
     
     image_1=Image.open("Screenshot.png")
     st.image(image_1,caption="DF_combined.head()")
-    
-
 
     st.markdown("""
-    ## **Steps in Preprocessing**
-    1️⃣ **Merged Kaggle Survey Data (2020-2022)**.  
-    2️⃣ **Identified & cleaned missing values**.  
-    3️⃣ **Mapped job titles and education levels**.  
-    4️⃣ **Extracted salary ranges and calculated averages**.  
-    """)
+    **Just Clean or Preprocess as well?**
+    *-"false" NaNs from multiple choice*
+    +-two types of questions*
+    *-Needing to order categorical data in visualisations*
+    *-Not all questions relevant*
+    
 
     st.subheader("Sample Merged Data")
     st.dataframe(df.head())
