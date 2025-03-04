@@ -70,11 +70,6 @@ elif page == "Data Preprocessing & Cleaning":
     unique_questions_2021 = get_unique_ordered_questions(df_2021.columns)
     unique_questions_2022 = get_unique_ordered_questions(df_2022.columns)
 
-    # Print the number of unique base questions for each dataset
-    print(f"Number of unique base questions in 2020 dataset: {len(unique_questions_2020)}")
-    print(f"Number of unique base questions in 2021 dataset: {len(unique_questions_2021)}")
-    print(f"Number of unique base questions in 2022 dataset: {len(unique_questions_2022)}")
-
     # Print the unique base questions with a count for each dataset
     def print_questions_with_count(questions, dataset_year):
         print(f"\nUnique base questions for {dataset_year} dataset:")
@@ -104,7 +99,7 @@ elif page == "Data Preprocessing & Cleaning":
 
     st.write("Once combined we had a DataFrame like this.")
     
-    image_1=Image.open(".DS-Streamlit/Screenshot.png") 
+    image_1=Image.open("Screenshot.png")
     st.image(image_1,caption="DF_combined.head()")
     
 
