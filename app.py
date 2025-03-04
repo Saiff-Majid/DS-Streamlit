@@ -13,6 +13,7 @@ role_model = joblib.load("role_model.pkl")
 
 # Load preprocessed dataset
 df = pd.read_csv("df_cleaned.csv")  
+df_merged = pd.read_csv("df_merged.csv")
 
 # Sidebar navigation
 st.sidebar.title("Navigation")
@@ -115,14 +116,42 @@ elif page == "Data Preprocessing & Cleaning":
     
     st.write("From the set of questions, we added a year category and created a common list we used to create a new Dataframe.")
     
-    st.markdown("""**BEFORE**""")
-    image_1=Image.open("Screenshot.png")
-    st.image(image_1,caption="DF_combined.head()")
-
-    
-    st.markdown("""**AFTER**""")
+    # ---- BEFORE ----
+    st.markdown("### **BEFORE: Raw Merged Data**")
     st.subheader("Sample Merged Data")
-    st.dataframe(df.head())
+    st.dataframe(df_merged.head())  
+
+    # ---- AFTER ----
+    st.markdown("### **AFTER: Cleaned & Processed Data**")
+    st.subheader("Sample Cleaned Data")
+    st.dataframe(df.head())  
+
+    # Plotly comparision
+    st.markdown("## 🔍 **Comparison of Dataset Statistics Before & After**")
+
+    # Compute statistics
+    df_before_desc = df_merged.describe().reset_index()
+    df_after_desc = df.describe().reset_index()
+
+    # Melt dataframes for better visualization
+    df_before_melted = df_before_desc.melt(id_vars="index", var_name="Feature", value_name="Before Cleaning")
+    df_after_melted = df_after_desc.melt(id_vars="index", var_name="Feature", value_name="After Cleaning")
+
+    # Merge melted dataframes
+    df_comparison = pd.merge(df_before_melted, df_after_melted, on=["index", "Feature"])
+
+    # Plotly bar chart for comparison
+    fig = px.bar(
+        df_comparison,
+        x="index",
+        y=["Before Cleaning", "After Cleaning"],
+        color="Feature",
+        barmode="group",
+        title="Statistical Comparison of Raw vs. Cleaned Data",
+        labels={"index": "Statistic", "value": "Value"},
+    )
+
+    st.plotly_chart(fig)
 
     
 
