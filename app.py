@@ -126,10 +126,10 @@ elif page == "Data Preprocessing & Cleaning":
     st.subheader("Sample Cleaned Data")
     st.dataframe(df.head())  
 
-    # ---- COMPARISON METRICS ----
+       # ---- COMPARISON METRICS ----
     st.markdown("## 🔍 **Data Cleaning Impact: A Visual Breakdown**")
 
-    # --- NUMBER OF ENTRIES COMPARISON ---
+    # --- Number of Entries Comparison ---
     entries_before = df_merged.shape[0]
     entries_after = df.shape[0]
 
@@ -143,9 +143,11 @@ elif page == "Data Preprocessing & Cleaning":
     )
     st.plotly_chart(fig_entries)
 
-    # --- COLUMN TYPE DISTRIBUTION ---
+    # ---  Column Type Distribution ---
     def get_column_types(df):
-        return df.dtypes.value_counts().reset_index().rename(columns={"index": "Type", 0: "Count"})
+        type_counts = df.dtypes.value_counts().reset_index()
+        type_counts.columns = ["Type", "Count"]  # Ensure correct column names
+        return type_counts
 
     col_types_before = get_column_types(df_merged)
     col_types_before["Dataset"] = "Before Cleaning"
@@ -157,14 +159,14 @@ elif page == "Data Preprocessing & Cleaning":
     fig_col_types = px.bar(
         col_types_combined,
         x="Type",
-        y="Count",
+        y="Count",  # Ensure this matches the column name
         color="Dataset",
         barmode="group",
-        title="📊 Column Type Distribution Before vs After Cleaning",
+        title="🧩 Column Type Distribution Before vs After Cleaning",
     )
     st.plotly_chart(fig_col_types)
 
-    # --- MISSING VALUES COMPARISON ---
+    # ---  Missing Values Comparison ---
     missing_before = df_merged.isna().sum()
     missing_after = df.isna().sum()
 
@@ -175,17 +177,18 @@ elif page == "Data Preprocessing & Cleaning":
     })
     missing_df = missing_df[missing_df["Missing Before"] > 0]  # Show only affected columns
 
-    fig_missing = px.bar(
-        missing_df.melt(id_vars=["Column"], var_name="Stage", value_name="Missing Values"),
-        x="Column",
-        y="Missing Values",
-        color="Stage",
-        barmode="group",
-        title="🚨 Missing Values Before vs After Cleaning"
-    )
-    st.plotly_chart(fig_missing)
+    if not missing_df.empty:
+        fig_missing = px.bar(
+            missing_df.melt(id_vars=["Column"], var_name="Stage", value_name="Missing Values"),
+            x="Column",
+            y="Missing Values",
+            color="Stage",
+            barmode="group",
+            title="🚨 Missing Values Before vs After Cleaning"
+        )
+        st.plotly_chart(fig_missing)
 
-    # --- STATISTICAL COMPARISON ---
+    # ---  Statistical Comparison ---
     df_before_stats = df_merged.describe().reset_index()
     df_after_stats = df.describe().reset_index()
 
@@ -201,10 +204,6 @@ elif page == "Data Preprocessing & Cleaning":
         title="📉 Changes in Dataset Statistics Before vs After Cleaning"
     )
     st.plotly_chart(fig_stats)
-
-
-
-    
 
 
 
