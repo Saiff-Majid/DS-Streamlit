@@ -127,13 +127,13 @@ elif page == "Data Preprocessing & Cleaning":
     # Select only the filtered columns from the original DataFrame
     df_filtered = df_merged[filtered_columns]
 
-   # Apply CSS to wrap column names and adjust row height
+      # Apply CSS to wrap column names and adjust row height
     st.markdown("""
         <style>
             .stDataFrame thead th {
-            white-space: normal;  /* Allow column names to wrap */
-            word-wrap: break-word;  /* Break long words onto the next line */
-            max-width: 200px;  /* Optional: Set a max-width for the header */
+                white-space: normal;  /* Allow column names to wrap */
+                word-wrap: break-word;  /* Break long words onto the next line */
+                max-width: 200px;  /* Optional: Set a max-width for the header */
             }
             .stDataFrame tbody tr th, .stDataFrame tbody tr td {
                 padding: 15px;  /* Increase padding for better height */
