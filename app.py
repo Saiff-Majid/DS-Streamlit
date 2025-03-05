@@ -119,7 +119,21 @@ elif page == "Data Preprocessing & Cleaning":
     # ---- BEFORE ----
     st.markdown("### **BEFORE: Raw Merged Data**")
     st.subheader("Sample Merged Data")
-    st.dataframe(df_merged.head())  
+    
+    # Prefix to match
+    prefix = "What programming languages do you use on a regular basis?"
+
+    # Create a column_config dynamically for columns that start with the prefix
+    column_config = {
+        col: {'visible': True} for col in df_merged.columns if col.startswith(prefix)}
+
+    # Display the dataframe with the dynamic column_config
+    st.dataframe(df_merged, column_config=column_config)
+
+
+
+    
+    #st.dataframe(df_merged.head())  
 
     # ---- AFTER ----
     st.markdown("### **AFTER: Cleaned & Processed Data**")
