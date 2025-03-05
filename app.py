@@ -127,6 +127,16 @@ elif page == "Data Preprocessing & Cleaning":
     # Select only the filtered columns from the original DataFrame
     df_filtered = df_merged[filtered_columns]
 
+    # Apply CSS to increase row height for better fitting
+    st.markdown("""
+    <style>
+        .stDataFrame tbody tr th, .stDataFrame tbody tr td {
+            padding: 15px;  /* Increase padding for better height */
+            height: 60px;   /* Increase row height */
+        }
+    </style>
+    """, unsafe_allow_html=True)
+
     # Display the filtered dataframe
     st.dataframe(df_filtered)
 
