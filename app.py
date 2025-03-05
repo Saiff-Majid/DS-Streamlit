@@ -122,17 +122,14 @@ elif page == "Data Preprocessing & Cleaning":
     
     # Prefix to match
     prefix = "What programming languages do you use on a regular basis?"
+    filtered_columns = [col for col in df_merged.columns if col.startswith(prefix)]
 
-    # Create a column_config dynamically for columns that start with the prefix
-    column_config = {
-        col: {'visible': True} for col in df_merged.columns if col.startswith(prefix)}
+    # Select only the filtered columns from the original DataFrame
+    df_filtered = df_merged[filtered_columns]
 
-    # Display the dataframe with the dynamic column_config
-    st.dataframe(df_merged, column_config=column_config)
+    # Display the filtered dataframe
+    st.dataframe(df_filtered)
 
-
-
-    
     #st.dataframe(df_merged.head())  
 
     # ---- AFTER ----
