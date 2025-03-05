@@ -128,7 +128,7 @@ elif page == "Data Preprocessing & Cleaning":
     df_filtered = df_merged[filtered_columns]
 
     # Display the filtered dataframe
-    st.dataframe(df_filtered, height=600, use_container_width=True)
+    st.dataframe(df_filtered)
 
     #st.dataframe(df_merged.head())  
 
