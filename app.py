@@ -50,18 +50,6 @@ elif page == "Data Preprocessing & Cleaning":
     - 🔄 **Standardize categories** (e.g., role names)
     - 🔍 **Feature engineering** to make data useful for ML models
 
-    ## **Steps in Preprocessing**
-    **1.** **Merged Kaggle Survey Data (2020-2022)**.  
-    
-    **2** **Chose Relevant Questions**  
-    
-    **3** **Identified & cleaned missing values**.
-    
-    **4** **Mapped job titles and education levels**. 
-    
-    **5** **Extracted salary ranges and calculated averages**. 
-    """)
-
     
     st.write("""The first step of the project was to figure out how to combine the three years of surveys.
     Below is the code with the functions used to extract the base questions.""")
@@ -138,6 +126,18 @@ elif page == "Data Preprocessing & Cleaning":
     st.markdown("### **AFTER: Cleaned & Processed Data**")
     st.subheader("Sample Cleaned Data")
     st.dataframe(df.head())  
+
+     ## **Steps in Preprocessing**
+    **1.** **Merged Kaggle Survey Data (2020-2022)**.  
+    
+    **2** **Chose Relevant Questions**  
+    
+    **3** **Identified & cleaned missing values**.
+    
+    **4** **Mapped job titles and education levels**. 
+    
+    **5** **Extracted salary ranges and calculated averages**. 
+    """)
 
        # ---- COMPARISON METRICS ----
     st.markdown("## 🔍 **Data Cleaning Impact: A Visual Breakdown**")
