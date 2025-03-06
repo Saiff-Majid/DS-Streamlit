@@ -51,9 +51,12 @@ elif page == "Data Preprocessing & Cleaning":
     - 🔍 **Feature engineering** to make data useful for ML models
     """)
 
+
     
     st.markdown("""The first step of the project was to figure out how to combine the three years of surveys.
     Below is the code with the functions used to extract the base questions.""")
+
+
     
     code_1="""
     def extract_base_question(question):
@@ -89,6 +92,7 @@ elif page == "Data Preprocessing & Cleaning":
                 
     st.write("""Once we had 3 lists of unique questions, we then needed to find the questions in common.""")
 
+    
     code_2= """
     #Convvert unique questions into sets
     unique_set_2020 = set(unique_questions_2020)
@@ -129,8 +133,8 @@ elif page == "Data Preprocessing & Cleaning":
     st.dataframe(df.head())  
 
      ## **Steps in Preprocessing**
+    st.subheader("**Steps in Preprocessing**")
     st.markdown("""
-    **Steps in Preprocessing**
     **1.** **Merged Kaggle Survey Data (2020-2022)**.  
     
     **2** **Chose Relevant Questions**  
@@ -142,6 +146,7 @@ elif page == "Data Preprocessing & Cleaning":
     **5** **Extracted salary ranges and calculated averages**. 
     """)
 
+    
        # ---- COMPARISON METRICS ----
     st.markdown("## 🔍 **Data Cleaning Impact: A Visual Breakdown**")
 
