@@ -113,7 +113,8 @@ elif page == "Data Preprocessing & Cleaning":
     print(f"Number of questions common across all three datasets: {len(common_questions_all)}")"""
     st.code(code_2, language="python")
 
-    
+    #--------Common questions----
+    st.image("DS-Streamlit/ds_questions.png", caption= "Common Questions")
     st.write("From the set of questions, we added a year category and created a common list we used to create a new Dataframe.")
     
     # ---- BEFORE ----
