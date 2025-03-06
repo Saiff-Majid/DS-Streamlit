@@ -114,7 +114,49 @@ elif page == "Data Preprocessing & Cleaning":
     st.code(code_2, language="python")
 
     #--------Common questions----
-    st.image("ds_questions1.png", caption= "Common Questions")
+    # List of questions
+    questions = [
+        "In which country do you currently reside?",
+        "Approximately how many times have you used a TPU (tensor processing unit)?",
+        "What is your gender?",
+        "Who/what are your favorite media sources that report on data science topics? (Select all that apply)",
+        "For how many years have you been writing code and/or programming?",
+        "What is the highest level of formal education that you have attained or plan to attain within the next 2 years?",
+        "Which of the following natural language processing (NLP) methods do you use on a regular basis? (Select all that apply)",
+        "Select the title most similar to your current role (or most recent title if retired):",
+        "Which of the following ML algorithms do you use on a regular basis? (Select all that apply):",
+        "Select any activities that make up an important part of your role at work: (Select all that apply)",
+        "Which of the following integrated development environments (IDE's) do you use on a regular basis? (Select all that apply)",
+        "What is your current yearly compensation (approximate $USD)?",
+        "What is the size of the company where you are employed?",
+        "What is your age (# years)?",
+        "Does your current employer incorporate machine learning methods into their business?",
+        "Which of the following machine learning frameworks do you use on a regular basis? (Select all that apply)",
+        "Which categories of computer vision methods do you use on a regular basis? (Select all that apply)",
+        "Duration (in seconds)",
+        "Approximately how many individuals are responsible for data science workloads at your place of business?",
+        "For how many years have you used machine learning methods?",
+        "What programming languages do you use on a regular basis? (Select all that apply)",
+        "On which platforms have you begun or completed data science courses? (Select all that apply)"
+    ]
+    
+        # Create a DataFrame to organize these questions
+    df3 = pd.DataFrame(questions, columns=["Questions"])
+    
+    # HTML code to make the text blue
+    def make_blue(text):
+        return f'<span style="color: blue;">{text}</span>'
+    
+    # Apply the styling to all the questions in the DataFrame
+    df3['Questions'] = df3['Questions'].apply(make_blue)
+    
+    # Display the table in Streamlit with custom HTML (blue text)
+    st.title("Survey Questions Table with Blue Text")
+    
+    # Render the styled table with Markdown
+    st.markdown(df.to_html(escape=False), unsafe_allow_html=True)
+
+    #st.image("ds_questions1.png", caption= "Common Questions")
     st.write("From the set of questions, we added a year category and created a common list we used to create a new Dataframe.")
     st.markdown("""blue[
     Common questions across all three datasets:
