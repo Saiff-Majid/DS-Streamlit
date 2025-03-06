@@ -98,7 +98,7 @@ elif page == "Data Preprocessing & Cleaning":
 
     st.code(code_1, language="python")
                 
-    st.write("""Once we had 3 sets of unique questions, we then needed to find the questions in common.""")
+    st.write("""Once we had 3 lists of unique questions, we then needed to find the questions in common.""")
 
     code_2= """
     #Convvert unique questions into sets
