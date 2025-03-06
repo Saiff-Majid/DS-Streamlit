@@ -151,10 +151,10 @@ elif page == "Data Preprocessing & Cleaning":
     df3['Questions'] = df3['Questions'].apply(make_blue)
     
     # Display the table in Streamlit with custom HTML (blue text)
-    st.title("Survey Questions Table with Blue Text")
+    st.title("Survey Questions")
     
     # Render the styled table with Markdown
-    st.markdown(df.to_html(escape=False), unsafe_allow_html=True)
+    st.markdown(df3.to_html(escape=False), unsafe_allow_html=True)
 
     #st.image("ds_questions1.png", caption= "Common Questions")
     st.write("From the set of questions, we added a year category and created a common list we used to create a new Dataframe.")
