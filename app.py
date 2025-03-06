@@ -49,6 +49,7 @@ elif page == "Data Preprocessing & Cleaning":
     - 🚫 **'False' NaNs** need One Hot-Encoding
     - 🔄 **Standardize categories** (e.g., role names)
     - 🔍 **Feature engineering** to make data useful for ML models
+    """)
 
     
     st.write("""The first step of the project was to figure out how to combine the three years of surveys.
@@ -128,6 +129,7 @@ elif page == "Data Preprocessing & Cleaning":
     st.dataframe(df.head())  
 
      ## **Steps in Preprocessing**
+    st.markdown("""
     **1.** **Merged Kaggle Survey Data (2020-2022)**.  
     
     **2** **Chose Relevant Questions**  
