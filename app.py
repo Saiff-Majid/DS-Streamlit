@@ -52,7 +52,7 @@ elif page == "Data Preprocessing & Cleaning":
     """)
 
     
-    st.write("""The first step of the project was to figure out how to combine the three years of surveys.
+    st.markdown("""The first step of the project was to figure out how to combine the three years of surveys.
     Below is the code with the functions used to extract the base questions.""")
     
     code_1="""
@@ -130,6 +130,7 @@ elif page == "Data Preprocessing & Cleaning":
 
      ## **Steps in Preprocessing**
     st.markdown("""
+    **Steps in Preprocessing**
     **1.** **Merged Kaggle Survey Data (2020-2022)**.  
     
     **2** **Chose Relevant Questions**  
