@@ -98,7 +98,7 @@ elif page == "Data Preprocessing & Cleaning":
 
     st.code(code_1, language="python")
                 
-    st.write("""We had a total of 22 unique questions.""")
+    st.write("""Once we had 3 sets of unique questions, we then needed to find the questions in common.""")
 
     code_2= """
     #Convvert unique questions into sets
@@ -115,7 +115,7 @@ elif page == "Data Preprocessing & Cleaning":
 
     #--------Common questions----
     st.image("ds_questions1.png", caption= "Common Questions")
-    st.write("From the set of questions, we added a year category and created a common list we used to create a new Dataframe.")
+    st.write("From the set of 22 common questions, we added a year category and created a common list we used to create a new Dataframe.")
 
     
     # ---- BEFORE ----
