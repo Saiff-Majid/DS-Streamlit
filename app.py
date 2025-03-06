@@ -116,6 +116,30 @@ elif page == "Data Preprocessing & Cleaning":
     #--------Common questions----
     st.image("ds_questions1.png", caption= "Common Questions")
     st.write("From the set of questions, we added a year category and created a common list we used to create a new Dataframe.")
+    st.write("""
+    Common questions across all three datasets:
+    Q1: In which country do you currently reside?
+    Q2: Approximately how many times have you used a TPU (tensor processing unit)?
+    Q3: What is your gender?
+    Q4: Who/what are your favorite media sources that report on data science topics? (Select all that apply)
+    Q5: For how many years have you been writing code and/or programming?
+    Q6: What is the highest level of formal education that you have attained or plan to attain within the next 2 years?
+    Q7: Which of the following natural language processing (NLP) methods do you use on a regular basis?  (Select all that apply)
+    Q8: Select the title most similar to your current role (or most recent title if retired):
+    Q9: Which of the following ML algorithms do you use on a regular basis? (Select all that apply):
+    Q10: Select any activities that make up an important part of your role at work: (Select all that apply)
+    Q11: Which of the following integrated development environments (IDE's) do you use on a regular basis?  (Select all that apply)
+    Q12: What is your current yearly compensation (approximate $USD)?
+    Q13: What is the size of the company where you are employed?
+    Q14: What is your age (# years)?
+    Q15: Does your current employer incorporate machine learning methods into their business?
+    Q16: Which of the following machine learning frameworks do you use on a regular basis? (Select all that apply)
+    Q17: Which categories of computer vision methods do you use on a regular basis?  (Select all that apply)
+    Q18: Duration (in seconds)
+    Q19: Approximately how many individuals are responsible for data science workloads at your place of business?
+    Q20: For how many years have you used machine learning methods?
+    Q21: What programming languages do you use on a regular basis? (Select all that apply)
+    Q22: On which platforms have you begun or completed data science courses? (Select all that apply)""")
     
     # ---- BEFORE ----
     st.markdown("### **BEFORE: Raw Merged Data**")
