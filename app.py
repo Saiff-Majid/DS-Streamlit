@@ -116,7 +116,7 @@ elif page == "Data Preprocessing & Cleaning":
     #--------Common questions----
     st.image("ds_questions1.png", caption= "Common Questions")
     st.write("From the set of questions, we added a year category and created a common list we used to create a new Dataframe.")
-    st.write("""
+    st.markdown("""blue[
     Common questions across all three datasets:
     Q1: In which country do you currently reside?
     Q2: Approximately how many times have you used a TPU (tensor processing unit)?
@@ -139,7 +139,7 @@ elif page == "Data Preprocessing & Cleaning":
     Q19: Approximately how many individuals are responsible for data science workloads at your place of business?
     Q20: For how many years have you used machine learning methods?
     Q21: What programming languages do you use on a regular basis? (Select all that apply)
-    Q22: On which platforms have you begun or completed data science courses? (Select all that apply)""")
+    Q22: On which platforms have you begun or completed data science courses? (Select all that apply)]""")
     
     # ---- BEFORE ----
     st.markdown("### **BEFORE: Raw Merged Data**")
